@@ -3,8 +3,8 @@ export const CashFlow = (graph) => {
 }
 
 const minCashFlowRec = (amount, result) => {
-    let mxCredit = getMax(amount)
-    let mxDebit = getMin(amount)
+    let mxCredit = getIndexMax(amount)
+    let mxDebit = getIndexMin(amount)
     if (amount[mxCredit] === 0 && amount[mxDebit] === 0)
         return result
     let min = minOf2(-amount[mxDebit], amount[mxCredit])
@@ -37,25 +37,27 @@ const minCashFlow = (graph) => {
         amount[creditorIndex] += (credit - debit)
       }
     }
-    return minCashFlowRec(amount, []);
+    return minCashFlowRec(amount, [])
 }
 
-const getMin = function (arr) {
-    var minInd = 0;
-    for (var i = 1; i < arr.length; i++)
-        if (arr[i] < arr[minInd])
-            minInd = i;
-    ;
-    return minInd;
-};
-const getMax = function (arr) {
-    var maxInd = 0;
-    for (var i = 1; i < arr.length; i++)
-        if (arr[i] > arr[maxInd])
-            maxInd = i;
-    ;
-    return maxInd;
-};
-const minOf2 = function (x, y) {
-    return (x < y) ? x : y;
-};
+const getIndexMin = (amount: number[]): number {
+    let minIndex = 0
+    amount.forEach((value, index) => {
+      if (value < amount[minIndex]) {
+          minIndex = index
+      }
+    })
+    return minIndex
+}
+
+const getIndexMax = (amount: number[]): number => {
+    var maxInd = 0
+    amount.forEach((value, index) => {
+      if (value > amount[maxInd]){
+          maxInd = index
+      }
+    })
+    return maxInd
+}
+
+const minOf2 = (x: number, y: number): number => (x < y) ? x : y
