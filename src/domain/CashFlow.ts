@@ -14,7 +14,7 @@ const minCashFlowRec = function (amount, result) {
     var min = minOf2(-amount[mxDebit], amount[mxCredit]);
     amount[mxCredit] -= min;
     amount[mxDebit] += min;
-    //console.info("Person " + ( + 1) + " pays " + min + " to " + "Person " + ( + 1));
+    //console.info("Person " + ( mxDebit+ 1) + " pays " + min + " to " + "Person " + ( mxCredit+ 1));
     result.push({
       debtorIndex: mxDebit,
       payAmount: min,
@@ -22,15 +22,26 @@ const minCashFlowRec = function (amount, result) {
     })
     minCashFlowRec(amount, result);
 };
-const minCashFlow = function (graph, result) {
-    var amount = (function (s) { var a = []; while (s-- > 0)
-        a.push(0); return a; })(N);
-    for (var p = 0; p < N; p++)
-        for (var i = 0; i < N; i++)
-            amount[p] += (graph[i][p] - graph[p][i]);
-    ;
+
+const initialAmount = (numberOfFriends: number) => {
+  let amount = []
+  while (numberOfFriends-- > 0) {
+    amount.push(0)
+  }
+  return amount
+}
+
+const minCashFlow = (graph, result) {
+    let amount = initialAmount(N)
+    for (let creditorIndex = 0; creditorIndex < N; creditorIndex++){
+      for (let debtorIndex = 0; debtorIndex < N; debtorIndex++){
+        const credit = graph[debtorIndex][creditorIndex]
+        const debit = graph[creditorIndex][debtorIndex]
+        amount[creditorIndex] += (credit - debit)
+      }
+    }
     minCashFlowRec(amount, result);
-};
+}
 
 const getMin = function (arr) {
     var minInd = 0;

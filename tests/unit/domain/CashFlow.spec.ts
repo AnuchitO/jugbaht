@@ -1,15 +1,15 @@
 import { CashFlow } from '@/domain/CashFlow';
 describe('Cal sample', () => {
   it('no one paid', () => {
-  const accounts = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1],
-    ];
+    const accounts = [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+      ];
 
-   const minCashFlow = CashFlow(accounts)
+     const minCashFlow = CashFlow(accounts)
 
-   expect(minCashFlow).toEqual([])
+     expect(minCashFlow).toEqual([])
   })
 
   it('tree person', () => {
