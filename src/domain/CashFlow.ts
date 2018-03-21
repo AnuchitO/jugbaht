@@ -1,8 +1,16 @@
-export const CashFlow = (graph) => {
+import { AccountTable } from '@/domain/Types'
+export const CashFlow = (graph: AccountTable) => {
   return minCashFlow(graph)
 }
 
-const minCashFlowRec = (amount, result) => {
+type Amount = number[]
+type Result = {
+  debtorIndex: number,
+  payAmount: number,
+  creditorIndex: number
+}
+
+const minCashFlowRec = (amount: Amount, result: Result[]): Result[] => {
     let mxCredit = getIndexMax(amount)
     let mxDebit = getIndexMin(amount)
     if (amount[mxCredit] === 0 && amount[mxDebit] === 0)
@@ -27,7 +35,7 @@ const initialAmount = (numberOfFriends: number) => {
   return amount
 }
 
-const minCashFlow = (graph) => {
+const minCashFlow = (graph: AccountTable): Result[] => {
     let numberOfFriends = graph.length
     let amount = initialAmount(numberOfFriends)
     for (let creditorIndex = 0; creditorIndex < numberOfFriends; creditorIndex++){
@@ -40,7 +48,7 @@ const minCashFlow = (graph) => {
     return minCashFlowRec(amount, [])
 }
 
-const getIndexMin = (amount: number[]): number {
+const getIndexMin = (amount: Amount): number {
     let minIndex = 0
     amount.forEach((value, index) => {
       if (value < amount[minIndex]) {
@@ -50,7 +58,7 @@ const getIndexMin = (amount: number[]): number {
     return minIndex
 }
 
-const getIndexMax = (amount: number[]): number => {
+const getIndexMax = (amount: Amount): number => {
     var maxInd = 0
     amount.forEach((value, index) => {
       if (value > amount[maxInd]){

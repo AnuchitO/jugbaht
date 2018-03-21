@@ -1,26 +1,32 @@
-interface Transaction {
-  payer: string;
-  owes: string[];
-  amount: number;
-}
+import { Transaction, AccountTable, AccountIndex } from '@/domain/Types';
 
-export const GenerateAccountTable = (transactions: Transaction): number[][] => {
-  return [[transactions[0].amount]]
-}
+export const GenerateAccountTable = (transactions: Transaction[], accountTable: AccountTable, accountIndex: AccountIndex): AccountTable => {
+  transactions.forEach((trans) => {
+    const shared = trans.amount / trans.owes.length;
+    const payerIndex = accountIndex[trans.payer];
+    trans.owes.forEach((owe) => {
+      const oweIndex = accountIndex[owe];
+      if (owe !== trans.payer) {
+        accountTable[oweIndex][payerIndex] += shared;
+      }
+    });
+  });
+  return accountTable;
+};
 
-export const InitialAccountTable = (members: string[]) => {
+export const InitialAccountTable = (members: string[]): AccountTable => {
   if (members.length <= 1) {
-    return [[0]]
+    return [[0]];
   }
 
-  let accountTable = []
-  for (let i = 0; i < members.length; i++){
-    let x = []
-    for (let j = 0; j < members.length; j++){
-      x.push(0)
+  const accountTable = [];
+  for (let i = 0; i < members.length; i++) {
+    const x = [];
+    for (let j = 0; j < members.length; j++) {
+      x.push(0);
     }
-    accountTable.push(x)
+    accountTable.push(x);
   }
 
-  return accountTable
-}
+  return accountTable;
+};
