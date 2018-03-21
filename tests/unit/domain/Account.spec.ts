@@ -28,6 +28,20 @@ describe('Initialize Account Table', () => {
         [0, 0]
       ])
     })
+
+    it('should no have side effect when update value in account table', () => {
+      const accountTable = InitialAccountTable(['Nong', 'Kob', 'Tom'])
+
+      accountTable[0][0] += 1
+      accountTable[1][1] += 2
+      accountTable[2][2] += 3
+
+      expect(accountTable).toEqual([
+      [1, 0, 0],
+      [0, 2, 0],
+      [0, 0, 3]
+      ])
+    })
   })
 })
 
