@@ -18,11 +18,12 @@ class Summary extends React.Component<{}, SummaryState> {
   renderTransactions({ transactions }: SummaryState) {
     return <tbody>
       {
-        transactions.map(t => <tr>
-          <td>{t.debtor}</td>
-          <td>{t.amount}</td>
-          <td>{t.creditor}</td>
-        </tr>
+        transactions.map(t =>
+          <tr>
+            <td>{t.debtor}</td>
+            <td>{t.amount}</td>
+            <td>{t.creditor}</td>
+          </tr>
         )
       }
     </tbody>
