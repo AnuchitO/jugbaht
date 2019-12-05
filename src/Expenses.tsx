@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react'
+import Go from './Go'
 
 
 export type Transaction = {
@@ -83,6 +84,7 @@ class Expenses extends React.Component<{}, ExpenseState> {
     console.log(record)
   }
 
+
   render() {
     return (
       <Fragment>
@@ -104,7 +106,7 @@ class Expenses extends React.Component<{}, ExpenseState> {
         </Fragment>
 
         <button type="button" onClick={() => this.save(this.state)}>Save</button>
-
+        <Go />
       </Fragment >
     )
   }
