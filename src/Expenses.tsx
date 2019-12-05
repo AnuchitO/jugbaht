@@ -7,43 +7,72 @@ export type Transaction = {
   amount: number;
 };
 
+type Member = {
+  checked: boolean
+  id: number
+  name: string
+}
 
-class Expenses extends React.Component {
+type ExpenseState = {
+  members: Member[]
+  amount: number
+}
+
+class Expenses extends React.Component<{}, ExpenseState> {
   constructor(props: any) {
     super(props)
 
     this.state = {
-      payer: "",
-      owes: [],
+      members: [
+        { checked: true, id: 1, name: "AnuchitO" },
+        { checked: true, id: 2, name: "Kob" },
+        { checked: true, id: 3, name: "Tom" },
+        { checked: true, id: 4, name: "Offlane" }
+      ],
       amount: 0
     }
+  }
+
+  renderMembers({ members }: ExpenseState) {
+    return members.map((member) =>
+      <div key={member.id.toString()}>
+        <input type="checkbox" id={member.id.toString()}
+          name="members"
+          checked={member.checked}
+          onChange={(e) => this.setState({
+            members: this.state.members.map(m => {
+              if (m.id === member.id) {
+                return { ...m, checked: !m.checked }
+              }
+              return m
+            })
+          })} />
+        <label htmlFor="1">{member.name}</label>
+      </div>)
+  }
+
+  save({ amount, members }: ExpenseState) {
+    const record = {
+      amount: amount,
+      payer: "AnuchitO",
+      owes: members.filter(m => m.checked).map(m => m.id)
+    }
+
+    console.log(record)
   }
 
   render() {
     return (
       <Fragment>
         {/* Amount */}
-        < input type="number" onChange={(e) => this.setState({ amount: e.target.value })} placeholder="0 bath" />
+        < input type="number" onChange={(e) => this.setState({ amount: +e.target.value })} placeholder="0 bath" />
 
         {/* Members */}
-        < div >
-          <div>
-            <input type="checkbox" id="1" name="members" onChange={(e) => console.log(e.target.value)} checked />
-            <label htmlFor="1">AnuchitO</label>
-          </div>
-          <div>
-            <input type="checkbox" id="2" name="members" onChange={(e) => console.log(e.target.value)} checked />
-            <label htmlFor="2">Kob</label>
-          </div>
-          <div>
-            <input type="checkbox" id="3" name="members" onChange={(e) => console.log(e.target.value)} checked />
-            <label htmlFor="3">Tom</label>
-          </div>
-          <div>
-            <input type="checkbox" id="4" name="members" onChange={(e) => console.log(e.target.value)} checked />
-            <label htmlFor="4">offlane</label>
-          </div>
-        </div >
+        <Fragment>
+          {
+            this.renderMembers(this.state)
+          }
+        </Fragment >
 
         {/* Note */}
         < label htmlFor="note" > Note</label >
@@ -54,7 +83,7 @@ class Expenses extends React.Component {
           <option value="snack">Snack</option>
         </select>
 
-        <button type="button" onClick={() => console.log(this.state)}>Save</button>
+        <button type="button" onClick={() => this.save(this.state)}>Save</button>
 
       </Fragment >
     )
