@@ -16,6 +16,8 @@ type Member = {
 type ExpenseState = {
   members: Member[]
   amount: number
+  note: string
+  notes: { selected: boolean, name: string }[]
 }
 
 class Expenses extends React.Component<{}, ExpenseState> {
@@ -29,7 +31,15 @@ class Expenses extends React.Component<{}, ExpenseState> {
         { checked: true, id: 3, name: "Tom" },
         { checked: true, id: 4, name: "Offlane" }
       ],
-      amount: 0
+      amount: 0,
+      note: "Food",
+      notes: [
+        { selected: false, name: "Food" },
+        { selected: false, name: "Drink" },
+        { selected: false, name: "Snack" },
+        { selected: false, name: "Coffee" },
+        { selected: false, name: "Fuel" }
+      ]
     }
   }
 
@@ -51,11 +61,23 @@ class Expenses extends React.Component<{}, ExpenseState> {
       </div>)
   }
 
-  save({ amount, members }: ExpenseState) {
+  renderNote({ notes }: ExpenseState) {
+    return <div>
+      <label htmlFor="note" >Note</label >
+      <select name="note" id="note"
+        value={this.state.note}
+        onChange={(e) => this.setState({ note: e.target.value })}>
+        {notes.map((n) => <option key={n.name} value={n.name}>{n.name}</option>)}
+      </select>
+    </div>
+  }
+
+  save({ amount, members, note }: ExpenseState) {
     const record = {
       amount: amount,
       payer: "AnuchitO",
-      owes: members.filter(m => m.checked).map(m => m.id)
+      owes: members.filter(m => m.checked).map(m => m.id),
+      note: note
     }
 
     console.log(record)
@@ -75,13 +97,11 @@ class Expenses extends React.Component<{}, ExpenseState> {
         </Fragment >
 
         {/* Note */}
-        < label htmlFor="note" > Note</label >
-        <select name="note" id="note" >
-          <option value="food">Food</option>
-          <option value="drink">Drink</option>
-          <option value="fuel">Fuel</option>
-          <option value="snack">Snack</option>
-        </select>
+        <Fragment>
+          {
+            this.renderNote(this.state)
+          }
+        </Fragment>
 
         <button type="button" onClick={() => this.save(this.state)}>Save</button>
 
