@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 type SummaryState = {
   transactions: { creditor: string, amount: number, debtor: string }[]
