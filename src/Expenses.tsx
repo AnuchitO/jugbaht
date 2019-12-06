@@ -1,6 +1,15 @@
-import React, { useState, Fragment } from 'react'
-import Go from './Go'
+import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
+import { ExpenseState as ESS, updateAmount } from './store/reducers'
 
+type AmountProps = {
+  updateAmount: typeof updateAmount
+}
+const amount: React.FC<AmountProps> = (props) => (
+  < input type="number" onChange={(e) => props.updateAmount(+e.target.value)} placeholder="0 bath" />
+)
+
+const Amount = connect((state: ESS) => ({}), { updateAmount })(amount)
 
 export type Transaction = {
   payer: string;
@@ -18,10 +27,14 @@ type ExpenseState = {
   members: Member[]
   amount: number
   note: string
-  notes: { selected: boolean, name: string }[]
+  notes: string[]
 }
 
-class Expenses extends React.Component<{}, ExpenseState> {
+type Props = {
+  expenses: ESS
+}
+
+class Expenses extends React.Component<Props, ExpenseState> {
   constructor(props: any) {
     super(props)
 
@@ -82,14 +95,16 @@ class Expenses extends React.Component<{}, ExpenseState> {
     }
 
     console.log(record)
+    console.log(this.state.amount)
+    console.log(this.props.expenses)
   }
 
 
   render() {
     return (
       <Fragment>
-        {/* Amount */}
-        < input type="number" onChange={(e) => this.setState({ amount: +e.target.value })} placeholder="0 bath" />
+        <Amount />
+
 
         {/* Members */}
         <Fragment>
@@ -106,10 +121,9 @@ class Expenses extends React.Component<{}, ExpenseState> {
         </Fragment>
 
         <button type="button" onClick={() => this.save(this.state)}>Save</button>
-        <Go />
       </Fragment >
     )
   }
 }
 
-export default Expenses;
+export default connect((state: ESS) => ({ expenses: state }))(Expenses);
