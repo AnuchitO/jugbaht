@@ -48,11 +48,11 @@ class Expenses extends React.Component<Props, ExpenseState> {
       amount: 0,
       note: "Food",
       notes: [
-        { selected: false, name: "Food" },
-        { selected: false, name: "Drink" },
-        { selected: false, name: "Snack" },
-        { selected: false, name: "Coffee" },
-        { selected: false, name: "Fuel" }
+        "Food",
+        "Drink",
+        "Snack",
+        "Coffee",
+        "Fuel"
       ]
     }
   }
@@ -81,7 +81,7 @@ class Expenses extends React.Component<Props, ExpenseState> {
       <select name="note" id="note"
         value={this.state.note}
         onChange={(e) => this.setState({ note: e.target.value })}>
-        {notes.map((n) => <option key={n.name} value={n.name}>{n.name}</option>)}
+        {notes.map((n) => <option key={n} value={n}>{n}</option>)}
       </select>
     </div>
   }
