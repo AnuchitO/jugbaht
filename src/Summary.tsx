@@ -1,4 +1,5 @@
 import React from 'react'
+import uuid from 'uuid/v4'
 import { connect } from 'react-redux'
 import { AppState } from './store'
 import { ExpenseState, Member } from './store/expenses/types'
@@ -65,7 +66,7 @@ class Summary extends React.Component<Props, SummaryState> {
     return <tbody>
       {
         ledgers.map(t =>
-          <tr>
+          <tr key={uuid()}>
             <td>{t.debtor.name}</td>
             <td>{t.amount}</td>
             <td>{t.creditor.name}</td>
@@ -80,9 +81,11 @@ class Summary extends React.Component<Props, SummaryState> {
       <table>
         <caption>Summary</caption>
         <thead>
-          <th>คุณ</th>
-          <th>ต้องจ่าย</th>
-          <th>ให้</th>
+          <tr>
+            <th>คุณ</th>
+            <th>ต้องจ่าย</th>
+            <th>ให้</th>
+          </tr>
         </thead>
         {
           this.renderExpenses(this.state)
