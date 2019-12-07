@@ -3,10 +3,13 @@ import {
   ExpenseActionsTypes,
   UPDATE_AMOUNT,
   UPDATE_NOTE,
-  UPDATE_MEMBER_CHECKED
+  UPDATE_MEMBER_CHECKED,
+  ADD_EXPENSE
 } from './types'
 
 const initialState: ExpenseState = {
+  records: [],
+  payer: "AnuchitO",
   amount: 0,
   note: "Snack",
   notes: [
@@ -48,6 +51,11 @@ export function expenseReducer(
           }
           return m
         })
+      }
+    case ADD_EXPENSE:
+      return {
+        ...state,
+        records: [...state.records, action.payload]
       }
     default:
       return state;

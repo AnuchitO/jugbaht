@@ -2,7 +2,9 @@ import {
   UPDATE_AMOUNT,
   UPDATE_NOTE,
   UPDATE_MEMBER_CHECKED,
-  MemberID
+  MemberID,
+  Record,
+  ADD_EXPENSE
 } from './types'
 
 export const updateAmount = (amount: number) => ({
@@ -18,4 +20,9 @@ export const updateNote = (note: string) => ({
 export const updateMemberChecked = (id: MemberID) => ({
   type: UPDATE_MEMBER_CHECKED,
   payload: id
+})
+
+export const addExpense = (record: Record) => ({
+  type: ADD_EXPENSE,
+  payload: record
 })

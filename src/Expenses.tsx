@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { AppState } from './store'
-import { updateAmount, updateNote, updateMemberChecked } from './store/expenses/actions'
-import { Member } from './store/expenses/types'
+import { updateAmount, updateNote, updateMemberChecked, addExpense } from './store/expenses/actions'
+import { Member, ExpenseState } from './store/expenses/types'
 
 type AmountProps = {
   updateAmount: typeof updateAmount
@@ -40,15 +40,15 @@ type MembersProps = {
   updateMemberChecked: typeof updateMemberChecked
 }
 
-const members: React.FC<MembersProps> = (props) => (
+const members: React.FC<MembersProps> = ({ members, updateMemberChecked }) => (
   <Fragment>
     {
-      props.members.map((member) =>
+      members.map((member) =>
         <div key={member.id.toString()}>
           <input type="checkbox" id={member.id.toString()}
             name="members"
             checked={member.checked}
-            onChange={(e) => { props.updateMemberChecked(member.id) }} />
+            onChange={(e) => { updateMemberChecked(member.id) }} />
           <label htmlFor="1">{member.name}</label>
         </div>)
     }
@@ -63,39 +63,26 @@ export type Transaction = {
   amount: number;
 };
 
-
-type ExpenseState = {
-  members: Member[]
-  amount: number
-  note: string
-  notes: string[]
-}
-
 type Props = {
+  expenses: ExpenseState
+  addExpense: typeof addExpense
 }
 
-class Expenses extends React.Component<Props, ExpenseState> {
+class Expenses extends React.Component<Props, {}> {
   constructor(props: any) {
     super(props)
-
-    this.state = {
-      members: [],
-      amount: 0,
-      note: "Food",
-      notes: []
-    }
   }
 
-  save({ amount, members, note }: ExpenseState) {
+  save({ amount, members, note, payer }: ExpenseState) {
     const record = {
+      id: 0,
       amount: amount,
-      payer: "AnuchitO",
+      payer: payer,
       owes: members.filter(m => m.checked).map(m => m.id),
       note: note
     }
 
-    console.log(record)
-    console.log(this.state.amount)
+    this.props.addExpense(record)
   }
 
 
@@ -105,10 +92,12 @@ class Expenses extends React.Component<Props, ExpenseState> {
         <Amount />
         <Members />
         <Note />
-        <button type="button" onClick={() => this.save(this.state)}>Save</button>
+        <button type="button" onClick={() => this.save(this.props.expenses)}>Save</button>
       </Fragment >
     )
   }
 }
 
-export default Expenses;
+export default connect((state: AppState) => ({ expenses: state.expenses }), {
+  addExpense
+})(Expenses);
