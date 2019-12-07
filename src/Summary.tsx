@@ -15,6 +15,12 @@ type Props = {
 class Summary extends React.Component<Props, SummaryState> {
   state = this.initialize()
 
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.expenses.records.length !== prevProps.expenses.records.length) {
+      this.setState(this.initialize())
+    }
+  }
+
   reckon(balances: any, ledgers: Ledgers): any {
     let max = balances.reduce((p: any, c: any, index: number) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
     let min = balances.reduce((p: any, c: any, index: number) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
