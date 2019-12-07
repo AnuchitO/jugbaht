@@ -16,9 +16,7 @@ class Summary extends React.Component<Props, SummaryState> {
 
   reckon(balances: any, ledgers: Ledgers): any {
     let max = balances.reduce((p: any, c: any, index: number) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
-    console.log("max:", max)
     let min = balances.reduce((p: any, c: any, index: number) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
-    console.log("min:", min)
 
     if (min.balance === 0 && max.balance === 0) {
       return ledgers
