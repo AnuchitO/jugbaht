@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { ExpenseState as ESS, updateAmount } from './store/reducers'
+import { AppState } from './store'
+import { updateAmount, updateNote } from './store/expenses/actions'
 
 type AmountProps = {
   updateAmount: typeof updateAmount
@@ -9,7 +10,28 @@ const amount: React.FC<AmountProps> = (props) => (
   < input type="number" onChange={(e) => props.updateAmount(+e.target.value)} placeholder="0 bath" />
 )
 
-const Amount = connect((state: ESS) => ({}), { updateAmount })(amount)
+const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
+
+
+type NoteProps = {
+  notes: string[],
+  note: string,
+  updateNote: typeof updateNote
+}
+const note: React.FC<NoteProps> = (props) => (
+  <Fragment>
+    <label htmlFor="note" >Note</label >
+    <select name="note" id="note"
+      value={props.note}
+      onChange={(e) => props.updateNote(e.target.value)}>
+      {props.notes.map((n) => <option key={n} value={n}>{n}</option>)}
+    </select>
+  </Fragment>
+)
+
+const Note = connect(
+  (state: AppState) => ({ notes: state.expenses.notes, note: state.expenses.note }),
+  { updateNote })(note)
 
 export type Transaction = {
   payer: string;
@@ -31,7 +53,6 @@ type ExpenseState = {
 }
 
 type Props = {
-  expenses: ESS
 }
 
 class Expenses extends React.Component<Props, ExpenseState> {
@@ -47,13 +68,7 @@ class Expenses extends React.Component<Props, ExpenseState> {
       ],
       amount: 0,
       note: "Food",
-      notes: [
-        "Food",
-        "Drink",
-        "Snack",
-        "Coffee",
-        "Fuel"
-      ]
+      notes: []
     }
   }
 
@@ -75,17 +90,6 @@ class Expenses extends React.Component<Props, ExpenseState> {
       </div>)
   }
 
-  renderNote({ notes }: ExpenseState) {
-    return <div>
-      <label htmlFor="note" >Note</label >
-      <select name="note" id="note"
-        value={this.state.note}
-        onChange={(e) => this.setState({ note: e.target.value })}>
-        {notes.map((n) => <option key={n} value={n}>{n}</option>)}
-      </select>
-    </div>
-  }
-
   save({ amount, members, note }: ExpenseState) {
     const record = {
       amount: amount,
@@ -96,7 +100,6 @@ class Expenses extends React.Component<Props, ExpenseState> {
 
     console.log(record)
     console.log(this.state.amount)
-    console.log(this.props.expenses)
   }
 
 
@@ -114,11 +117,7 @@ class Expenses extends React.Component<Props, ExpenseState> {
         </Fragment >
 
         {/* Note */}
-        <Fragment>
-          {
-            this.renderNote(this.state)
-          }
-        </Fragment>
+        <Note />
 
         <button type="button" onClick={() => this.save(this.state)}>Save</button>
       </Fragment >
@@ -126,4 +125,4 @@ class Expenses extends React.Component<Props, ExpenseState> {
   }
 }
 
-export default connect((state: ESS) => ({ expenses: state }))(Expenses);
+export default Expenses;
