@@ -5,7 +5,7 @@ export interface Member {
   name: string
 }
 
-export type RecordID = number
+export type RecordID = string
 export interface Record {
   id: RecordID
   amount: number

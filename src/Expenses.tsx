@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import uuid from 'uuid/v4'
+import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
 import { AppState } from './store'
 import { updateAmount, updateNote, updateMemberChecked, addExpense } from './store/expenses/actions'
@@ -57,12 +59,6 @@ const members: React.FC<MembersProps> = ({ members, updateMemberChecked }) => (
 
 const Members = connect((state: AppState) => ({ members: state.expenses.members }), { updateMemberChecked })(members)
 
-export type Transaction = {
-  payer: string;
-  owes: string[];
-  amount: number;
-};
-
 type Props = {
   expenses: ExpenseState
   addExpense: typeof addExpense
@@ -75,7 +71,7 @@ class Expenses extends React.Component<Props, {}> {
 
   save({ amount, members, note, payer }: ExpenseState) {
     const record = {
-      id: 0,
+      id: uuid(),
       amount: amount,
       payer: payer,
       owes: members.filter(m => m.checked).map(m => m.id),
