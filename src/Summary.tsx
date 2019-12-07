@@ -64,9 +64,6 @@ class Summary extends React.Component<Props, SummaryState> {
       }, 0.0)
     }))
 
-    console.log("wallets")
-    console.log(wallets)
-
     const balances = wallets.map(w => ({
       member: w.member,
       balance: w.credit - w.debt
