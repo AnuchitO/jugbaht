@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { withRouter } from 'react-router-dom'
 import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
@@ -65,6 +66,7 @@ const Members = connect((state: AppState) => ({ members: state.expenses.members 
 type Props = {
   expenses: ExpenseState
   addExpense: typeof addExpense
+  history: any
 }
 
 class Expenses extends React.Component<Props, {}> {
@@ -79,6 +81,7 @@ class Expenses extends React.Component<Props, {}> {
     }
 
     this.props.addExpense(record)
+    this.props.history.push("/summary")
   }
 
 
@@ -95,8 +98,8 @@ class Expenses extends React.Component<Props, {}> {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   (state: AppState) => ({ expenses: state.expenses }),
   {
     addExpense
-  })(Expenses);
+  })(Expenses));
