@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { AppState } from './store'
-import { updateAmount, updateNote } from './store/expenses/actions'
+import { updateAmount, updateNote, updateMemberChecked } from './store/expenses/actions'
+import { Member } from './store/expenses/types'
 
 type AmountProps = {
   updateAmount: typeof updateAmount
@@ -33,17 +34,35 @@ const Note = connect(
   (state: AppState) => ({ notes: state.expenses.notes, note: state.expenses.note }),
   { updateNote })(note)
 
+
+type MembersProps = {
+  members: Member[],
+  updateMemberChecked: typeof updateMemberChecked
+}
+
+const members: React.FC<MembersProps> = (props) => (
+  <Fragment>
+    {
+      props.members.map((member) =>
+        <div key={member.id.toString()}>
+          <input type="checkbox" id={member.id.toString()}
+            name="members"
+            checked={member.checked}
+            onChange={(e) => { props.updateMemberChecked(member.id) }} />
+          <label htmlFor="1">{member.name}</label>
+        </div>)
+    }
+  </Fragment>
+)
+
+const Members = connect((state: AppState) => ({ members: state.expenses.members }), { updateMemberChecked })(members)
+
 export type Transaction = {
   payer: string;
   owes: string[];
   amount: number;
 };
 
-type Member = {
-  checked: boolean
-  id: number
-  name: string
-}
 
 type ExpenseState = {
   members: Member[]
@@ -60,34 +79,11 @@ class Expenses extends React.Component<Props, ExpenseState> {
     super(props)
 
     this.state = {
-      members: [
-        { checked: true, id: 1, name: "AnuchitO" },
-        { checked: true, id: 2, name: "Kob" },
-        { checked: true, id: 3, name: "Tom" },
-        { checked: true, id: 4, name: "Offlane" }
-      ],
+      members: [],
       amount: 0,
       note: "Food",
       notes: []
     }
-  }
-
-  renderMembers({ members }: ExpenseState) {
-    return members.map((member) =>
-      <div key={member.id.toString()}>
-        <input type="checkbox" id={member.id.toString()}
-          name="members"
-          checked={member.checked}
-          onChange={(e) => this.setState({
-            members: this.state.members.map(m => {
-              if (m.id === member.id) {
-                return { ...m, checked: !m.checked }
-              }
-              return m
-            })
-          })} />
-        <label htmlFor="1">{member.name}</label>
-      </div>)
   }
 
   save({ amount, members, note }: ExpenseState) {
@@ -107,18 +103,8 @@ class Expenses extends React.Component<Props, ExpenseState> {
     return (
       <Fragment>
         <Amount />
-
-
-        {/* Members */}
-        <Fragment>
-          {
-            this.renderMembers(this.state)
-          }
-        </Fragment >
-
-        {/* Note */}
+        <Members />
         <Note />
-
         <button type="button" onClick={() => this.save(this.state)}>Save</button>
       </Fragment >
     )
