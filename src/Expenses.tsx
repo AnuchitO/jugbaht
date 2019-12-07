@@ -65,9 +65,6 @@ type Props = {
 }
 
 class Expenses extends React.Component<Props, {}> {
-  constructor(props: any) {
-    super(props)
-  }
 
   save({ amount, members, note, payer }: ExpenseState) {
     const record = {

@@ -13,10 +13,6 @@ type Props = {
 class Summary extends React.Component<Props, SummaryState> {
   state = this.initialize()
 
-  constructor(props: Props) {
-    super(props)
-  }
-
   reckon(balances: any, expenses: any): any {
     let max = balances.reduce((p: any, c: any, index: any) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
     console.log("max:", max)
