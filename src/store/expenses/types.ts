@@ -9,14 +9,14 @@ export type RecordID = string
 export interface Record {
   id: RecordID
   amount: number
-  payer: string
-  owes: MemberID[]
+  payer: Member
+  owes: Member[]
   note: string
 }
 
 export interface ExpenseState {
   records: Record[]
-  payer: string
+  payer: Member
   members: Member[]
   notes: string[]
   note: string

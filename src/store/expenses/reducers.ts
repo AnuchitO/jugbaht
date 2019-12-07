@@ -9,7 +9,7 @@ import {
 
 const initialState: ExpenseState = {
   records: [],
-  payer: "AnuchitO",
+  payer: { id: 1, name: "AnuchitO", checked: true },
   amount: 0,
   note: "Snack",
   notes: [

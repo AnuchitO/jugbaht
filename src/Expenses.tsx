@@ -74,7 +74,7 @@ class Expenses extends React.Component<Props, {}> {
       id: uuid(),
       amount: amount,
       payer: payer,
-      owes: members.filter(m => m.checked).map(m => m.id),
+      owes: members.filter(m => m.checked),
       note: note
     }
 
@@ -85,6 +85,7 @@ class Expenses extends React.Component<Props, {}> {
   render() {
     return (
       <Fragment>
+        <ExpensesHistory records={this.props.expenses.records} />
         <Amount />
         <Members />
         <Note />
@@ -94,6 +95,8 @@ class Expenses extends React.Component<Props, {}> {
   }
 }
 
-export default connect((state: AppState) => ({ expenses: state.expenses }), {
-  addExpense
-})(Expenses);
+export default connect(
+  (state: AppState) => ({ expenses: state.expenses }),
+  {
+    addExpense
+  })(Expenses);
