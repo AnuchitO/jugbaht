@@ -44,16 +44,19 @@ type MembersProps = {
 
 const members: React.FC<MembersProps> = ({ members, updateMemberChecked }) => (
   <Fragment>
-    {
-      members.map((member) =>
-        <div key={member.id.toString()}>
-          <input type="checkbox" id={member.id.toString()}
-            name="members"
-            checked={member.checked}
-            onChange={(e) => { updateMemberChecked(member.id) }} />
-          <label htmlFor="1">{member.name}</label>
-        </div>)
-    }
+    <fieldset>
+      <legend>My friends</legend>
+      {
+        members.map((member) =>
+          <div key={member.id.toString()}>
+            <input type="checkbox" id={member.id.toString()}
+              name="members"
+              checked={member.checked}
+              onChange={(e) => { updateMemberChecked(member.id) }} />
+            <label htmlFor="1">{member.name}</label>
+          </div>)
+      }
+    </fieldset>
   </Fragment>
 )
 
