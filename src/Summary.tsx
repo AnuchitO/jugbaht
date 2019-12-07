@@ -1,34 +1,98 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { AppState } from './store'
+import { ExpenseState, Member } from './store/expenses/types'
 
 type SummaryState = {
-  transactions: { creditor: string, amount: number, debtor: string }[]
+  expenses: { creditor: Member, amount: number, debtor: Member }[]
 }
-class Summary extends React.Component<{}, SummaryState> {
-  constructor(props: any) {
+
+type Props = {
+  expenses: ExpenseState
+}
+class Summary extends React.Component<Props, SummaryState> {
+  state = this.initialize()
+
+  constructor(props: Props) {
     super(props)
-    this.state = {
-      transactions: [
-        { creditor: 'AnuchitO', amount: 10, debtor: 'Kob' },
-        { creditor: 'AnuchitO', amount: 10, debtor: 'Tom' },
-        { creditor: 'AnuchitO', amount: 10, debtor: 'Offlane' },
-      ]
-    }
   }
 
-  renderTransactions({ transactions }: SummaryState) {
+  reckon(balances: any, expenses: any): any {
+    let max = balances.reduce((p: any, c: any, index: any) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
+    console.log("max:", max)
+    let min = balances.reduce((p: any, c: any, index: any) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
+    console.log("min:", min)
+
+    if (min.balance === 0 && max.balance === 0) {
+      return expenses
+    }
+
+    let diff = Math.min(max.balance, -min.balance)
+    let reBalances = balances.map((b: any, index: number) => {
+      if (index === max.index) {  // creditor
+        return { ...b, balance: b.balance - diff }
+      }
+
+      if (index === min.index) { // debtor
+        return { ...b, balance: b.balance + diff }
+      }
+
+      return b
+    })
+
+    expenses.push({
+      debtor: min.member,
+      amount: diff,
+      creditor: max.member
+    })
+
+    return this.reckon(reBalances, expenses)
+  }
+
+  initialize() {
+    const { records, members } = this.props.expenses
+    const wallets = members.map(m => ({
+      member: m,
+      credit: records.reduce((prev, curr) => {
+        if (curr.payer.id === m.id) {
+          return curr.amount + prev
+        }
+
+        return prev
+      }, 0.0),
+      debt: records.reduce((prev, curr) => {
+        if (curr.owes.some(o => o.id === m.id)) {
+          return (curr.amount / curr.owes.length) + prev
+        }
+        return prev
+      }, 0.0)
+    }))
+
+    console.log("wallets")
+    console.log(wallets)
+
+    const balances = wallets.map(w => ({
+      member: w.member,
+      balance: w.credit - w.debt
+    }))
+
+    return {
+      expenses: this.reckon(balances, [])
+    }
+  }
+  renderExpenses({ expenses }: SummaryState) {
     return <tbody>
       {
-        transactions.map(t =>
+        expenses.map(t =>
           <tr>
-            <td>{t.debtor}</td>
+            <td>{t.debtor.name}</td>
             <td>{t.amount}</td>
-            <td>{t.creditor}</td>
+            <td>{t.creditor.name}</td>
           </tr>
         )
       }
     </tbody>
   }
-
 
   render() {
     return <div>
@@ -40,11 +104,11 @@ class Summary extends React.Component<{}, SummaryState> {
           <th>ให้</th>
         </thead>
         {
-          this.renderTransactions(this.state)
+          this.renderExpenses(this.state)
         }
       </table>
     </div>
   }
 }
 
-export default Summary
+export default connect((state: AppState) => ({ expenses: state.expenses }), {})(Summary)
