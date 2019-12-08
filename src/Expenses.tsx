@@ -12,6 +12,10 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -22,7 +26,12 @@ import {
   NativeSelect,
   TextField
 } from '@material-ui/core'
-import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
+
+import {
+  MonetizationOnOutlined as MonetizationOnOutlinedIcon,
+  Person as PersonIcon,
+  Add as AddIcon
+} from '@material-ui/icons'
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
@@ -65,7 +74,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Payer: React.FC<PayerProps> = (props) => {
   const [open, setOpen] = React.useState(false)
-  const [newPayer, setNewPayer] = React.useState(props.payer)
   const openDialog = () => {
     setOpen(true)
   }
@@ -89,40 +97,22 @@ const Payer: React.FC<PayerProps> = (props) => {
           label={props.payer.name}
           onClick={openDialog} />
       </Badge>
-      <Dialog open={open} onClose={closeDialog} aria-labelledby="form-dialog-title">
-        <DialogTitle id="payer-dialog-title">Choose payer</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To subscribe to
-          </DialogContentText>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="note">Payer</InputLabel>
-            <NativeSelect
-              value={newPayer.id}
-              onChange={(e) => {
-                const payer = props.members.find(m => m.id.toString() === e.target.value) || newPayer
-                setNewPayer(payer)
-              }}
-              inputProps={{
-                name: 'new-payer',
-                id: 'new-payer-id',
-              }}
-            >
-              {
-                props.members.map(m => <option key={'new-payer-' + m.name} value={m.id}>{m.name}</option>)
-              }
-            </NativeSelect>
-          </FormControl>
-
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => changePayer(newPayer)} color="primary">
-            Change
-          </Button>
-        </DialogActions>
+      <Dialog onClose={closeDialog} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle id="simple-dialog-title">Choose Payer</DialogTitle>
+        <List>
+          {props.members.map(member => (
+            <ListItem button
+              autoFocus={member.id === props.payer.id} // TODO: add background for current payer
+              onClick={() => changePayer(member)} key={"new-payer-option-" + member.id}>
+              <ListItemAvatar>
+                <Avatar >
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={member.name} />
+            </ListItem>
+          ))}
+        </List>
       </Dialog>
     </Fragment>
   )
