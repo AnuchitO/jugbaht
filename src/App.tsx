@@ -6,6 +6,7 @@ import {
   Link
 } from 'react-router-dom'
 import './App.css'
+import Container from '@material-ui/core/Container';
 import { AppState } from './store'
 import Expenses from './Expenses'
 import Summary from './Summary'
@@ -22,13 +23,13 @@ const Nav = () => (
 const App: React.FC<AppState> = (props) => {
   return (
     <div className="App">
-      <Router>
-        <Nav />
-        <Route path="/" exact>
-          <Expenses />
-        </Route>
-        <Route path="/summary" component={Summary} />
-      </Router>
+      <Container maxWidth="md">
+        <Router>
+          <Nav />
+          <Route path="/" exact component={Expenses} />
+          <Route path="/summary" component={Summary} />
+        </Router>
+      </Container>
     </div>
   )
 }

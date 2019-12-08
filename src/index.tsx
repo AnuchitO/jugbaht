@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import './index.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import 'typeface-roboto';
 import App from './App';
 import configureStore from './store'
 import * as serviceWorker from './serviceWorker';
@@ -10,6 +12,7 @@ const store = configureStore()
 
 const Root = () => (
   <Provider store={store}>
+    <CssBaseline />
     <App />
   </Provider>
 )

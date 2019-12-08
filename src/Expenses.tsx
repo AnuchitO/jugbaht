@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
+import { Grid, Input, TextField } from '@material-ui/core'
 import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
@@ -10,8 +11,11 @@ import { Member, ExpenseState } from './store/expenses/types'
 type AmountProps = {
   updateAmount: typeof updateAmount
 }
+// TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 const amount: React.FC<AmountProps> = (props) => (
-  < input type="number" onChange={(e) => props.updateAmount(+e.target.value)} placeholder="0 bath" />
+  <TextField variant="outlined" fullWidth label='Amount'>
+    <Input type='number' onChange={(e) => props.updateAmount(+e.currentTarget.value)} />
+  </TextField>
 )
 
 const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
@@ -43,6 +47,7 @@ type MembersProps = {
   updateMemberChecked: typeof updateMemberChecked
 }
 
+// TODO: change to mobile picker like iPhone
 const members: React.FC<MembersProps> = ({ members, updateMemberChecked }) => (
   <Fragment>
     <fieldset>
@@ -88,11 +93,23 @@ class Expenses extends React.Component<Props, {}> {
   render() {
     return (
       <Fragment>
-        <ExpensesHistory records={this.props.expenses.records} />
-        <Amount />
-        <Members />
-        <Note />
-        <button type="button" onClick={() => this.save(this.props.expenses)}>Save</button>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <ExpensesHistory records={this.props.expenses.records} />
+          </Grid>
+          <Grid item xs={12}>
+            <Amount />
+          </Grid>
+          <Grid item xs={12}>
+            <Members />
+          </Grid>
+          <Grid item xs={12}>
+            <Note />
+          </Grid>
+          <Grid item xs={12}>
+            <button type="button" onClick={() => this.save(this.props.expenses)}>Save</button>
+          </Grid>
+        </Grid>
       </Fragment >
     )
   }
