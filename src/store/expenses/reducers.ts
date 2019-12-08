@@ -3,13 +3,85 @@ import {
   ExpenseActionsTypes,
   UPDATE_AMOUNT,
   UPDATE_NOTE,
-  UPDATE_MEMBER_CHECKED,
-  ADD_EXPENSE
+  ADD_EXPENSE,
+  UPDATE_OWES
 } from './types'
 
+const allMembers = [
+  { id: 1, name: "AnuchitO" },
+  { id: 2, name: "Kob" },
+  { id: 3, name: "Tom" },
+  { id: 4, name: "Sao" },
+  { id: 5, name: "Pan" }
+] // TODO: make sure initialize owes and members as the same
+
 const initialState: ExpenseState = {
-  records: [],
-  payer: { id: 1, name: "AnuchitO", checked: true },
+  records: [
+    {
+      id: 'e1e8e3d2-1fa6-4e88-9dae-103c8289011a',
+      amount: 100,
+      payer: {
+        id: 4,
+        name: 'Sao'
+      },
+      owes: [
+        {
+          id: 1,
+          name: 'AnuchitO'
+        },
+        {
+          id: 2,
+          name: 'Kob'
+        },
+        {
+          id: 3,
+          name: 'Tom'
+        },
+        {
+          id: 4,
+          name: 'Sao'
+        },
+        {
+          id: 5,
+          name: 'Pan'
+        }
+      ],
+      note: 'Snack'
+    },
+    {
+      id: '441282cb-5eb0-4ee8-ba4a-41d574444487',
+      amount: 800,
+      payer: {
+        id: 4,
+        name: 'Sao'
+      },
+      owes: [
+        {
+          id: 1,
+          name: 'AnuchitO'
+        },
+        {
+          id: 2,
+          name: 'Kob'
+        },
+        {
+          id: 3,
+          name: 'Tom'
+        },
+        {
+          id: 4,
+          name: 'Sao'
+        },
+        {
+          id: 5,
+          name: 'Pan'
+        }
+      ],
+      note: 'Fuel'
+    }
+  ], // TODO: localstorage
+  owes: allMembers,
+  payer: { id: 4, name: "Sao" },
   amount: 0,
   note: "Snack",
   notes: [
@@ -19,12 +91,7 @@ const initialState: ExpenseState = {
     "Coffee",
     "Fuel"
   ],
-  members: [
-    { checked: true, id: 1, name: "AnuchitO" },
-    { checked: true, id: 2, name: "Kob" },
-    { checked: true, id: 3, name: "Tom" },
-    { checked: true, id: 4, name: "Offlane" }
-  ]
+  members: allMembers
 };
 
 export function expenseReducer(
@@ -36,26 +103,21 @@ export function expenseReducer(
       return {
         ...state,
         amount: action.payload
-      };
+      }
     case UPDATE_NOTE:
       return {
         ...state,
         note: action.payload
       }
-    case UPDATE_MEMBER_CHECKED:
-      return {
-        ...state,
-        members: state.members.map(m => {
-          if (m.id === action.payload) {
-            return { ...m, checked: !m.checked }
-          }
-          return m
-        })
-      }
     case ADD_EXPENSE:
       return {
         ...state,
         records: [...state.records, action.payload]
+      }
+    case UPDATE_OWES:
+      return {
+        ...state,
+        owes: action.payload
       }
     default:
       return state;

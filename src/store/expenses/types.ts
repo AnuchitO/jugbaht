@@ -1,6 +1,5 @@
 export type MemberID = number
 export interface Member {
-  checked: boolean
   id: MemberID
   name: string
 }
@@ -15,17 +14,18 @@ export interface Record {
 }
 
 export interface ExpenseState {
-  records: Record[]
-  payer: Member
-  members: Member[]
-  notes: string[]
-  note: string
   amount: number
+  members: Member[]
+  note: string
+  notes: string[]
+  owes: Member[]
+  payer: Member
+  records: Record[]
 }
 
 export const UPDATE_AMOUNT = "UPDATE_AMOUNT"
 export const UPDATE_NOTE = "UPDATE_NOTE"
-export const UPDATE_MEMBER_CHECKED = "UPDATE_MEMBER_CHECKED"
+export const UPDATE_OWES = "UPDATE_OWES"
 export const ADD_EXPENSE = "ADD_EXPENSE"
 
 interface UpdateAmountAction {
@@ -38,9 +38,9 @@ interface UpdateNoteAction {
   payload: string
 }
 
-interface UpdateMemberChecked {
-  type: typeof UPDATE_MEMBER_CHECKED
-  payload: MemberID
+interface UpdateOwes {
+  type: typeof UPDATE_OWES
+  payload: Member[]
 }
 
 interface AddExpense {
@@ -48,4 +48,4 @@ interface AddExpense {
   payload: Record
 }
 
-export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateMemberChecked | AddExpense
+export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateOwes | AddExpense

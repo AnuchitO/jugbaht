@@ -1,11 +1,25 @@
 import React, { Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Grid, Input, TextField } from '@material-ui/core'
+import {
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
+  FormLabel,
+  Grid,
+  Input,
+  TextField
+} from '@material-ui/core'
+
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
 import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
 import { AppState } from './store'
-import { updateAmount, updateNote, updateMemberChecked, addExpense } from './store/expenses/actions'
+import { updateAmount, updateNote, addExpense, updateOwes } from './store/expenses/actions'
 import { Member, ExpenseState } from './store/expenses/types'
 
 type AmountProps = {
@@ -13,7 +27,7 @@ type AmountProps = {
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 const amount: React.FC<AmountProps> = (props) => (
-  <TextField variant="outlined" fullWidth label='Amount'>
+  <TextField variant="outlined" required fullWidth label='Amount'>
     <Input type='number' onChange={(e) => props.updateAmount(+e.currentTarget.value)} />
   </TextField>
 )
@@ -42,38 +56,86 @@ const Note = connect(
   { updateNote })(note)
 
 
-type MembersProps = {
-  members: Member[],
-  updateMemberChecked: typeof updateMemberChecked
-}
-
-// TODO: change to mobile picker like iPhone
-const members: React.FC<MembersProps> = ({ members, updateMemberChecked }) => (
-  <Fragment>
-    <fieldset>
-      <legend>My friends</legend>
-      {
-        members.map((member) =>
-          <div key={member.id.toString()}>
-            <input type="checkbox" id={member.id.toString()}
-              name="members"
-              checked={member.checked}
-              onChange={(e) => { updateMemberChecked(member.id) }} />
-            <label htmlFor="1">{member.name}</label>
-          </div>)
-      }
-    </fieldset>
-  </Fragment>
-)
-
-const Members = connect((state: AppState) => ({ members: state.expenses.members }), { updateMemberChecked })(members)
-
 type Props = {
   expenses: ExpenseState
   addExpense: typeof addExpense
+  updateOwes: typeof updateOwes
   history: any
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+    },
+    formControl: {
+      marginTop: theme.spacing(2),
+    },
+    margin: {
+      margin: theme.spacing(1),
+    },
+  }),
+);
+
+type MM = Member & {
+  checked: boolean
+}
+
+
+// const Members = connect((state: AppState) => ({ members: state.expenses.members }), { updateMemberChecked })(members)
+
+type ExpensesFormProps = {
+  updateOwes: typeof updateOwes
+}
+
+const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
+  const classes = useStyles()
+  const members: Member[] = [
+    { id: 1, name: "AnuchitO" },
+    { id: 2, name: "Kob" },
+    { id: 3, name: "Tom" },
+    { id: 4, name: "Sao" },
+    { id: 5, name: "Pan" }
+  ]
+
+  const list: MM[] = members.reduce((prev: any, curr: Member) => ([...prev, { ...curr, checked: true }]), [])
+  const [state, setState] = React.useState(list);
+
+  const handleChange = (member: MM) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checking = state.map((m: MM) => {
+      if (m.id === member.id) {
+        return { ...m, checked: !m.checked }
+      }
+      return m
+    })
+    setState(checking);
+
+    const owes: Member[] = checking.filter((m: MM) => m.checked).map((m: MM) => ({ id: m.id, name: m.name }))
+    props.updateOwes(owes)
+  };
+
+  return (
+    <Fragment>
+      <FormControl component="fieldset" fullWidth className={classes.formControl}>
+        <Amount />
+      </FormControl>
+      <FormControl component="fieldset" fullWidth className={classes.formControl}>
+        <FormLabel component="legend">Assign responsibility</FormLabel>
+        <FormGroup>
+          {
+            state.map((m: MM) =>
+              <FormControlLabel
+                key={'member-' + m.id}
+                control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                label={m.name}
+              />)
+          }
+        </FormGroup>
+        <FormHelperText>Be careful</FormHelperText>
+      </FormControl>
+    </Fragment>
+  )
+}
 class Expenses extends React.Component<Props, {}> {
 
   save({ amount, members, note, payer }: ExpenseState) {
@@ -81,14 +143,13 @@ class Expenses extends React.Component<Props, {}> {
       id: uuid(),
       amount: amount,
       payer: payer,
-      owes: members.filter(m => m.checked),
+      owes: [],//members.filter(m => m.checked),
       note: note
     }
 
     this.props.addExpense(record)
-    this.props.history.push("/summary")
+    // this.props.history.push("/summary")
   }
-
 
   render() {
     return (
@@ -98,10 +159,12 @@ class Expenses extends React.Component<Props, {}> {
             <ExpensesHistory records={this.props.expenses.records} />
           </Grid>
           <Grid item xs={12}>
-            <Amount />
+            <Divider variant="middle" />
           </Grid>
           <Grid item xs={12}>
-            <Members />
+            <ExpensesForm updateOwes={this.props.updateOwes} />
+          </Grid>
+          <Grid item xs={12}>
           </Grid>
           <Grid item xs={12}>
             <Note />
@@ -118,5 +181,6 @@ class Expenses extends React.Component<Props, {}> {
 export default withRouter(connect(
   (state: AppState) => ({ expenses: state.expenses }),
   {
-    addExpense
+    addExpense,
+    updateOwes
   })(Expenses));
