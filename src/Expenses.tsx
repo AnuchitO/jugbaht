@@ -9,7 +9,6 @@ import {
   FormHelperText,
   FormLabel,
   Grid,
-  Input,
   InputLabel,
   NativeSelect,
   TextField
@@ -32,9 +31,7 @@ const amount: React.FC<AmountProps> = (props) => (
   <TextField variant="outlined" required fullWidth
     label='Amount'
     type='number'
-    onChange={(e) => props.updateAmount(+e.currentTarget.value)}
-  >
-  </TextField>
+    onChange={(e) => props.updateAmount(+e.currentTarget.value)} />
 )
 
 const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
