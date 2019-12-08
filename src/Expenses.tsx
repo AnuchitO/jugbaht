@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import {
+  Button,
   Checkbox,
   Divider,
   FormControl,
@@ -13,6 +14,7 @@ import {
   NativeSelect,
   TextField
 } from '@material-ui/core'
+import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
@@ -165,7 +167,14 @@ class Expenses extends React.Component<Props, {}> {
             />
           </Grid>
           <Grid item xs={12}>
-            <button type="button" onClick={() => this.save(this.props.expenses)}>Save</button>
+            <Button fullWidth
+              variant="contained"
+              color="primary"
+              endIcon={<MonetizationOnOutlinedIcon />}
+              onClick={() => this.save(this.props.expenses)}
+            >
+              Save
+      </Button>
           </Grid>
         </Grid>
       </Fragment >
