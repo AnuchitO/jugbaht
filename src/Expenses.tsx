@@ -109,22 +109,22 @@ const Payer: React.FC<PayerProps> = (props) => {
 
   return (
     <Fragment>
-      <Badge badgeContent={'payer'} color="primary">
+      <Badge badgeContent={'payer'} color='primary'>
         <Chip
-          id="bootstrap-input"
-          variant="outlined"
+          id='bootstrap-input'
+          variant='outlined'
           avatar={<Avatar>{props.payer.name.slice(0, 2)}</Avatar>}
           label={props.payer.name}
           onClick={openDialog} />
       </Badge>
       {/* TODO: adjust width of dialog, its too small */}
-      <Dialog onClose={closeDialog} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Choose Payer</DialogTitle>
+      <Dialog onClose={closeDialog} aria-labelledby='simple-dialog-title' open={open}>
+        <DialogTitle id='simple-dialog-title'>Choose Payer</DialogTitle>
         <List>
           {props.members.map(member => (
             <ListItem button
               autoFocus={member.id === props.payer.id} // TODO: add background for current payer
-              onClick={() => changePayer(member)} key={"new-payer-option-" + member.id}>
+              onClick={() => changePayer(member)} key={'new-payer-option-' + member.id}>
               <ListItemAvatar>
                 <Avatar >
                   <PersonIcon />
@@ -191,14 +191,14 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
 
   return (
     <Fragment>
-      <FormControl component="fieldset" className={classes.payer}>
+      <FormControl component='fieldset' className={classes.payer}>
         <Payer members={props.members} payer={props.payer} changePayer={props.changePayer} />
       </FormControl>
-      <FormControl component="fieldset" fullWidth className={classes.formControl}>
+      <FormControl component='fieldset' fullWidth className={classes.formControl}>
         <Amount />
       </FormControl>
-      <FormControl component="fieldset" fullWidth className={classes.formControl}>
-        <FormLabel component="legend">Paid for</FormLabel>
+      <FormControl component='fieldset' fullWidth className={classes.formControl}>
+        <FormLabel component='legend'>Paid for</FormLabel>
         <Grid container spacing={2}>
           {
             state.map((m: OwesMember) =>
@@ -216,7 +216,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
 
       </FormControl>
       <FormControl fullWidth className={classes.formControl}>
-        <InputLabel htmlFor="note">Note</InputLabel>
+        <InputLabel htmlFor='note'>Note</InputLabel>
         <NativeSelect
           value={props.note}
           onChange={(e) => props.updateNote(e.target.value)}
@@ -247,7 +247,7 @@ class Expenses extends React.Component<Props, {}> {
 
     // TODO: add snackbar after success: https://material-ui.com/components/snackbars/#customized-snackbars
     this.props.addExpense(record)
-    // this.props.history.push("/summary")
+    // this.props.history.push('/summary')
   }
 
   render() {
@@ -259,7 +259,7 @@ class Expenses extends React.Component<Props, {}> {
             <ExpensesHistory records={this.props.expenses.records} />
           </Grid>
           <Grid item xs={12}>
-            <Divider variant="middle" />
+            <Divider variant='middle' />
           </Grid>
           {/* TODO: fix position of expense history and expense form */}
           <Grid item xs={12}>
@@ -275,9 +275,9 @@ class Expenses extends React.Component<Props, {}> {
           </Grid>
           <Grid item xs={12} >
             <Button
-              variant="contained"
-              color="primary"
-              size="large"
+              variant='contained'
+              color='primary'
+              size='large'
               fullWidth
               startIcon={<MonetizationOnOutlinedIcon />}
               onClick={() => this.save(this.props.expenses)}>
