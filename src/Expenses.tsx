@@ -10,6 +10,8 @@ import {
   FormLabel,
   Grid,
   Input,
+  InputLabel,
+  NativeSelect,
   TextField
 } from '@material-ui/core'
 
@@ -27,8 +29,11 @@ type AmountProps = {
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 const amount: React.FC<AmountProps> = (props) => (
-  <TextField variant="outlined" required fullWidth label='Amount'>
-    <Input type='number' onChange={(e) => props.updateAmount(+e.currentTarget.value)} />
+  <TextField variant="outlined" required fullWidth
+    label='Amount'
+    type='number'
+    onChange={(e) => props.updateAmount(+e.currentTarget.value)}
+  >
   </TextField>
 )
 
@@ -60,6 +65,7 @@ type Props = {
   expenses: ExpenseState
   addExpense: typeof addExpense
   updateOwes: typeof updateOwes
+  updateNote: typeof updateNote
   history: any
 }
 
@@ -83,7 +89,10 @@ type OwesMember = Member & {
 
 type ExpensesFormProps = {
   updateOwes: typeof updateOwes
+  updateNote: typeof updateNote
   members: Member[]
+  notes: string[]
+  note: string
 }
 
 const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
@@ -123,7 +132,22 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
               />)
           }
         </FormGroup>
-        <FormHelperText>Be careful</FormHelperText>
+      </FormControl>
+      <FormControl fullWidth className={classes.formControl}>
+        <InputLabel htmlFor="note">Note</InputLabel>
+        <NativeSelect
+          value={props.note}
+          onChange={(e) => props.updateNote(e.target.value)}
+          inputProps={{
+            name: 'note',
+            id: 'note',
+          }}
+        >
+          {
+            props.notes.map(n => <option key={'note-' + n} value={n}>{n}</option>)
+          }
+        </NativeSelect>
+        <FormHelperText>Some important helper text</FormHelperText>
       </FormControl>
     </Fragment>
   )
@@ -154,7 +178,13 @@ class Expenses extends React.Component<Props, {}> {
             <Divider variant="middle" />
           </Grid>
           <Grid item xs={12}>
-            <ExpensesForm updateOwes={this.props.updateOwes} members={this.props.expenses.members} />
+            <ExpensesForm
+              updateOwes={this.props.updateOwes}
+              members={this.props.expenses.members}
+              updateNote={this.props.updateNote}
+              note={this.props.expenses.note}
+              notes={this.props.expenses.notes}
+            />
           </Grid>
           <Grid item xs={12}>
           </Grid>
@@ -174,5 +204,6 @@ export default withRouter(connect(
   (state: AppState) => ({ expenses: state.expenses }),
   {
     addExpense,
-    updateOwes
+    updateOwes,
+    updateNote
   })(Expenses));
