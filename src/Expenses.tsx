@@ -42,6 +42,7 @@ type AmountProps = {
   updateAmount: typeof updateAmount
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
+// TODO: close keyboard when hit enter
 const amount: React.FC<AmountProps> = (props) => (
   <TextField variant="outlined" required fullWidth
     label='Amount'
@@ -152,7 +153,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
   const [state, setState] = React.useState(list);
 
   useEffect(() => {
-    _updateOwes(state)
+    _updateOwes(state) // eslint-disable-next-line
   }, [state])
 
   const _updateOwes = (members: OwesMember[]) => {
