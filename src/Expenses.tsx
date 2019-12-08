@@ -42,13 +42,36 @@ type AmountProps = {
   updateAmount: typeof updateAmount
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
-// TODO: close keyboard when hit enter
-const amount: React.FC<AmountProps> = (props) => (
-  <TextField variant="outlined" required fullWidth
-    label='Amount'
-    type='number'
-    onChange={(e) => props.updateAmount(+e.currentTarget.value)} />
-)
+const amount: React.FC<AmountProps> = (props) => {
+  const id = 'amount'
+  const onchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    props.updateAmount(+event.currentTarget.value)
+  }
+
+  const onKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    hideKeyboard(event.keyCode)
+  }
+
+  const hideKeyboard = (keyCode: number) => {
+    if (keyCode === 13) {
+      const el: any = document.querySelector('#amount')
+      el.blur()
+    }
+  }
+
+
+  return (
+    <TextField variant='outlined' required fullWidth
+      id={id}
+      label='Amount'
+      type='number'
+      onKeyUp={onKeyUp}
+      onChange={onchange} />
+  )
+}
+
 
 const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
 
