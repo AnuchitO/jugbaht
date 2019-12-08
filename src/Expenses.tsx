@@ -1,8 +1,11 @@
 import React, { Fragment, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import {
+  Avatar,
   Button,
+  Badge,
   Checkbox,
+  Chip,
   Divider,
   FormControl,
   FormControlLabel,
@@ -57,6 +60,9 @@ const useStyles = makeStyles((theme: Theme) =>
     margin: {
       margin: theme.spacing(1),
     },
+    payer: {
+
+    },
   }),
 );
 
@@ -73,6 +79,7 @@ type NoteProps = {
 type ExpensesFormProps = NoteProps & {
   updateOwes: typeof updateOwes
   members: Member[]
+  payer: Member
 }
 
 const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
@@ -97,6 +104,16 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
 
   return (
     <Fragment>
+      <FormControl component="fieldset" className={classes.payer}>
+        <Badge badgeContent={'payer'} color="primary">
+          <Chip
+            id="bootstrap-input"
+            variant="outlined"
+            avatar={<Avatar>{props.payer.name.slice(0, 2)}</Avatar>}
+            label={props.payer.name}
+            onClick={(e) => console.log(e)} />
+        </Badge>
+      </FormControl>
       <FormControl component="fieldset" fullWidth className={classes.formControl}>
         <Amount />
       </FormControl>
@@ -161,10 +178,11 @@ class Expenses extends React.Component<Props, {}> {
           <Grid item xs={12}>
             <ExpensesForm
               updateOwes={this.props.updateOwes}
-              members={this.props.expenses.members}
               updateNote={this.props.updateNote}
               note={this.props.expenses.note}
               notes={this.props.expenses.notes}
+              members={this.props.expenses.members}
+              payer={this.props.expenses.payer}
             />
           </Grid>
           <Grid item xs={12} >
