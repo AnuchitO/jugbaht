@@ -94,6 +94,7 @@ const Payer: React.FC<PayerProps> = (props) => {
           label={props.payer.name}
           onClick={openDialog} />
       </Badge>
+      {/* TODO: adjust width of dialog, its too small */}
       <Dialog onClose={closeDialog} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Choose Payer</DialogTitle>
         <List>
@@ -231,11 +232,13 @@ class Expenses extends React.Component<Props, {}> {
       <Fragment>
         <Grid container spacing={3}>
           <Grid item xs={12}>
+            {/* TODO: hide top one when overflow */}
             <ExpensesHistory records={this.props.expenses.records} />
           </Grid>
           <Grid item xs={12}>
             <Divider variant="middle" />
           </Grid>
+          {/* TODO: fix position of expense history and expense form */}
           <Grid item xs={12}>
             <ExpensesForm
               updateOwes={this.props.updateOwes}
