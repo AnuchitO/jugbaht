@@ -36,28 +36,6 @@ const amount: React.FC<AmountProps> = (props) => (
 
 const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
 
-
-type NoteProps = {
-  notes: string[],
-  note: string,
-  updateNote: typeof updateNote
-}
-const note: React.FC<NoteProps> = (props) => (
-  <Fragment>
-    <label htmlFor="note" >Note</label >
-    <select name="note" id="note"
-      value={props.note}
-      onChange={(e) => props.updateNote(e.target.value)}>
-      {props.notes.map((n) => <option key={n} value={n}>{n}</option>)}
-    </select>
-  </Fragment>
-)
-
-const Note = connect(
-  (state: AppState) => ({ notes: state.expenses.notes, note: state.expenses.note }),
-  { updateNote })(note)
-
-
 type Props = {
   expenses: ExpenseState
   addExpense: typeof addExpense
@@ -84,12 +62,15 @@ type OwesMember = Member & {
   checked: boolean
 }
 
-type ExpensesFormProps = {
-  updateOwes: typeof updateOwes
-  updateNote: typeof updateNote
-  members: Member[]
+type NoteProps = {
   notes: string[]
   note: string
+  updateNote: typeof updateNote
+}
+
+type ExpensesFormProps = NoteProps & {
+  updateOwes: typeof updateOwes
+  members: Member[]
 }
 
 const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
@@ -182,11 +163,6 @@ class Expenses extends React.Component<Props, {}> {
               note={this.props.expenses.note}
               notes={this.props.expenses.notes}
             />
-          </Grid>
-          <Grid item xs={12}>
-          </Grid>
-          <Grid item xs={12}>
-            <Note />
           </Grid>
           <Grid item xs={12}>
             <button type="button" onClick={() => this.save(this.props.expenses)}>Save</button>
