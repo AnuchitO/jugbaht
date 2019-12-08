@@ -101,7 +101,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
         <Amount />
       </FormControl>
       <FormControl component="fieldset" fullWidth className={classes.formControl}>
-        <FormLabel component="legend">Assign responsibility</FormLabel>
+        <FormLabel component="legend">Paid for</FormLabel>
         <FormGroup>
           {
             state.map((m: OwesMember) =>
@@ -166,15 +166,16 @@ class Expenses extends React.Component<Props, {}> {
               notes={this.props.expenses.notes}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Button fullWidth
+          <Grid item xs={12} >
+            <Button
               variant="contained"
               color="primary"
-              endIcon={<MonetizationOnOutlinedIcon />}
-              onClick={() => this.save(this.props.expenses)}
-            >
+              size="large"
+              fullWidth
+              startIcon={<MonetizationOnOutlinedIcon />}
+              onClick={() => this.save(this.props.expenses)}>
               Save
-      </Button>
+            </Button>
           </Grid>
         </Grid>
       </Fragment >
