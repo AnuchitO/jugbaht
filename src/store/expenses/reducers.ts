@@ -4,7 +4,8 @@ import {
   UPDATE_AMOUNT,
   UPDATE_NOTE,
   ADD_EXPENSE,
-  UPDATE_OWES
+  UPDATE_OWES,
+  CHANGE_PAYER
 } from './types'
 
 const allMembers = [
@@ -118,6 +119,11 @@ export function expenseReducer(
       return {
         ...state,
         owes: action.payload
+      }
+    case CHANGE_PAYER:
+      return {
+        ...state,
+        payer: action.payload
       }
     default:
       return state;

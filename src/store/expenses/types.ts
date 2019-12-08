@@ -27,6 +27,7 @@ export const UPDATE_AMOUNT = "UPDATE_AMOUNT"
 export const UPDATE_NOTE = "UPDATE_NOTE"
 export const UPDATE_OWES = "UPDATE_OWES"
 export const ADD_EXPENSE = "ADD_EXPENSE"
+export const CHANGE_PAYER = "CHANGE_PAYER"
 
 interface UpdateAmountAction {
   type: typeof UPDATE_AMOUNT
@@ -48,4 +49,9 @@ interface AddExpense {
   payload: Record
 }
 
-export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateOwes | AddExpense
+interface ChangePayer {
+  type: typeof CHANGE_PAYER
+  payload: Member
+}
+
+export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateOwes | AddExpense | ChangePayer

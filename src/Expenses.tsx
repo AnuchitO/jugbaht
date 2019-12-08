@@ -2,10 +2,15 @@ import React, { Fragment, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   Avatar,
-  Button,
   Badge,
+  Button,
   Checkbox,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   FormControl,
   FormControlLabel,
@@ -25,7 +30,7 @@ import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
 import { AppState } from './store'
-import { updateAmount, updateNote, addExpense, updateOwes } from './store/expenses/actions'
+import { updateAmount, updateNote, addExpense, updateOwes, changePayer } from './store/expenses/actions'
 import { Member, ExpenseState } from './store/expenses/types'
 
 type AmountProps = {
@@ -40,14 +45,6 @@ const amount: React.FC<AmountProps> = (props) => (
 )
 
 const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
-
-type Props = {
-  expenses: ExpenseState
-  addExpense: typeof addExpense
-  updateOwes: typeof updateOwes
-  updateNote: typeof updateNote
-  history: any
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,8 +63,88 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+const Payer: React.FC<PayerProps> = (props) => {
+  const [open, setOpen] = React.useState(false)
+  const [newPayer, setNewPayer] = React.useState(props.payer)
+  const openDialog = () => {
+    setOpen(true)
+  }
+
+  const closeDialog = () => {
+    setOpen(false)
+  }
+
+  const changePayer = (payer: Member) => {
+    props.changePayer(payer)
+    closeDialog()
+  }
+
+  return (
+    <Fragment>
+      <Badge badgeContent={'payer'} color="primary">
+        <Chip
+          id="bootstrap-input"
+          variant="outlined"
+          avatar={<Avatar>{props.payer.name.slice(0, 2)}</Avatar>}
+          label={props.payer.name}
+          onClick={openDialog} />
+      </Badge>
+      <Dialog open={open} onClose={closeDialog} aria-labelledby="form-dialog-title">
+        <DialogTitle id="payer-dialog-title">Choose payer</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to
+          </DialogContentText>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="note">Payer</InputLabel>
+            <NativeSelect
+              value={newPayer.id}
+              onChange={(e) => {
+                const payer = props.members.find(m => m.id.toString() === e.target.value) || newPayer
+                setNewPayer(payer)
+              }}
+              inputProps={{
+                name: 'new-payer',
+                id: 'new-payer-id',
+              }}
+            >
+              {
+                props.members.map(m => <option key={'new-payer-' + m.name} value={m.id}>{m.name}</option>)
+              }
+            </NativeSelect>
+          </FormControl>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => changePayer(newPayer)} color="primary">
+            Change
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Fragment>
+  )
+}
+
+type Props = {
+  expenses: ExpenseState
+  addExpense: typeof addExpense
+  updateOwes: typeof updateOwes
+  updateNote: typeof updateNote
+  changePayer: typeof changePayer
+  history: any
+}
+
 type OwesMember = Member & {
   checked: boolean
+}
+
+type PayerProps = {
+  members: Member[]
+  payer: Member
+  changePayer: typeof changePayer
 }
 
 type NoteProps = {
@@ -76,10 +153,9 @@ type NoteProps = {
   updateNote: typeof updateNote
 }
 
-type ExpensesFormProps = NoteProps & {
+type ExpensesFormProps = PayerProps & NoteProps & {
   updateOwes: typeof updateOwes
   members: Member[]
-  payer: Member
 }
 
 const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
@@ -105,14 +181,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
   return (
     <Fragment>
       <FormControl component="fieldset" className={classes.payer}>
-        <Badge badgeContent={'payer'} color="primary">
-          <Chip
-            id="bootstrap-input"
-            variant="outlined"
-            avatar={<Avatar>{props.payer.name.slice(0, 2)}</Avatar>}
-            label={props.payer.name}
-            onClick={(e) => console.log(e)} />
-        </Badge>
+        <Payer members={props.members} payer={props.payer} changePayer={props.changePayer} />
       </FormControl>
       <FormControl component="fieldset" fullWidth className={classes.formControl}>
         <Amount />
@@ -183,6 +252,7 @@ class Expenses extends React.Component<Props, {}> {
               notes={this.props.expenses.notes}
               members={this.props.expenses.members}
               payer={this.props.expenses.payer}
+              changePayer={this.props.changePayer}
             />
           </Grid>
           <Grid item xs={12} >
@@ -207,5 +277,6 @@ export default withRouter(connect(
   {
     addExpense,
     updateOwes,
-    updateNote
+    updateNote,
+    changePayer
   })(Expenses));
