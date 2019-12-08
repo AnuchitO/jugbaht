@@ -27,7 +27,6 @@ import {
 import {
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   Person as PersonIcon,
-  Add as AddIcon
 } from '@material-ui/icons'
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
