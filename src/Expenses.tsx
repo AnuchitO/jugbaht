@@ -143,6 +143,7 @@ class Expenses extends React.Component<Props, {}> {
       note
     }
 
+    // TODO: add snackbar after success: https://material-ui.com/components/snackbars/#customized-snackbars
     this.props.addExpense(record)
     // this.props.history.push("/summary")
   }
