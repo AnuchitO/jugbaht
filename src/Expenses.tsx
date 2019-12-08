@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   Checkbox,
@@ -77,41 +77,33 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type MM = Member & {
+type OwesMember = Member & {
   checked: boolean
 }
 
-
-// const Members = connect((state: AppState) => ({ members: state.expenses.members }), { updateMemberChecked })(members)
-
 type ExpensesFormProps = {
   updateOwes: typeof updateOwes
+  members: Member[]
 }
 
 const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
   const classes = useStyles()
-  const members: Member[] = [
-    { id: 1, name: "AnuchitO" },
-    { id: 2, name: "Kob" },
-    { id: 3, name: "Tom" },
-    { id: 4, name: "Sao" },
-    { id: 5, name: "Pan" }
-  ]
 
-  const list: MM[] = members.reduce((prev: any, curr: Member) => ([...prev, { ...curr, checked: true }]), [])
+  const list: OwesMember[] = props.members.reduce((prev: any, curr: Member) => ([...prev, { ...curr, checked: true }]), [])
   const [state, setState] = React.useState(list);
 
-  const handleChange = (member: MM) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checking = state.map((m: MM) => {
-      if (m.id === member.id) {
-        return { ...m, checked: !m.checked }
-      }
-      return m
-    })
-    setState(checking);
+  useEffect(() => {
+    _updateOwes(state)
+  }, [state])
 
-    const owes: Member[] = checking.filter((m: MM) => m.checked).map((m: MM) => ({ id: m.id, name: m.name }))
+  const _updateOwes = (members: OwesMember[]) => {
+    const owes = members.filter((m: OwesMember) => m.checked).map((m: OwesMember) => ({ id: m.id, name: m.name }))
     props.updateOwes(owes)
+  }
+
+  const handleChange = (member: OwesMember) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checking = state.map((m: OwesMember) => ((m.id === member.id) ? { ...m, checked: !m.checked } : m))
+    setState(checking);
   };
 
   return (
@@ -123,7 +115,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
         <FormLabel component="legend">Assign responsibility</FormLabel>
         <FormGroup>
           {
-            state.map((m: MM) =>
+            state.map((m: OwesMember) =>
               <FormControlLabel
                 key={'member-' + m.id}
                 control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
@@ -138,13 +130,13 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
 }
 class Expenses extends React.Component<Props, {}> {
 
-  save({ amount, members, note, payer }: ExpenseState) {
+  save({ amount, owes, note, payer }: ExpenseState) {
     const record = {
       id: uuid(),
-      amount: amount,
-      payer: payer,
-      owes: [],//members.filter(m => m.checked),
-      note: note
+      amount,
+      payer,
+      owes,
+      note
     }
 
     this.props.addExpense(record)
@@ -162,7 +154,7 @@ class Expenses extends React.Component<Props, {}> {
             <Divider variant="middle" />
           </Grid>
           <Grid item xs={12}>
-            <ExpensesForm updateOwes={this.props.updateOwes} />
+            <ExpensesForm updateOwes={this.props.updateOwes} members={this.props.expenses.members} />
           </Grid>
           <Grid item xs={12}>
           </Grid>
