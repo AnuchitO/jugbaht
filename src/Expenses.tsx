@@ -7,9 +7,6 @@ import {
   Checkbox,
   Chip,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
   Divider,
   List,
@@ -178,16 +175,21 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
       </FormControl>
       <FormControl component="fieldset" fullWidth className={classes.formControl}>
         <FormLabel component="legend">Paid for</FormLabel>
-        <FormGroup>
+        <Grid container spacing={2}>
           {
             state.map((m: OwesMember) =>
-              <FormControlLabel
-                key={'member-' + m.id}
-                control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
-                label={m.name}
-              />)
+              <Grid item xs={4} md={3} key={'member-' + m.id}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                    label={m.name}
+                  />
+                </FormGroup>
+              </Grid>
+            )
           }
-        </FormGroup>
+        </Grid>
+
       </FormControl>
       <FormControl fullWidth className={classes.formControl}>
         <InputLabel htmlFor="note">Note</InputLabel>
