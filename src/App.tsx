@@ -149,3 +149,7 @@ const mapStateToProps = (state: AppState) => ({ ...state })
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+
+// TODO: add initialize page setup
+// TODO: load default trip and redirect to expenses page.
