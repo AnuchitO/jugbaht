@@ -246,6 +246,7 @@ class Expenses extends React.Component<Props, {}> {
     }
 
     // TODO: add snackbar after success: https://material-ui.com/components/snackbars/#customized-snackbars
+    // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
     this.props.addExpense(record)
     // TODO: clear amount state after submit
     // this.props.history.push('/summary')
