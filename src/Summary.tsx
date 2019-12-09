@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import uuid from 'uuid/v4'
 import { connect } from 'react-redux'
 import { AppState } from './store'
 import { ExpenseState, Member } from './store/expenses/types'
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  Typography,
+  TableRow,
+} from '@material-ui/core'
 
 type Ledgers = { creditor: Member, amount: number, debtor: Member }[]
 type SummaryState = {
@@ -68,36 +77,40 @@ class Summary extends React.Component<Props, SummaryState> {
       ledgers: this.reckon(balances, [])
     }
   }
-  renderExpenses({ ledgers }: SummaryState) {
-    return <tbody>
-      {
-        ledgers.map(t =>
-          <tr key={uuid()}>
-            <td>{t.debtor.name}</td>
-            <td>{t.amount}</td>
-            <td>{t.creditor.name}</td>
-          </tr>
-        )
-      }
-    </tbody>
+  renderTableBody({ ledgers }: SummaryState) {
+    return (
+      <TableBody>
+        {ledgers.map(lg => (
+          <TableRow key={uuid()}>
+            <TableCell component="th" scope="row">
+              {lg.debtor.name}
+            </TableCell>
+            <TableCell align="right">{lg.amount}</TableCell>
+            <TableCell>{lg.creditor.name}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    )
   }
 
   render() {
-    return <div>
-      <table>
-        <caption>Summary</caption>
-        <thead>
-          <tr>
-            <th>คุณ</th>
-            <th>ต้องจ่าย</th>
-            <th>ให้</th>
-          </tr>
-        </thead>
-        {
-          this.renderExpenses(this.state)
-        }
-      </table>
-    </div>
+    return <Fragment>
+      <Paper>
+        <Table aria-label="summary">
+          <caption>Summary</caption>
+          <TableHead>
+            <TableRow>
+              <TableCell><Typography variant="button">คุณ</Typography></TableCell>
+              <TableCell><Typography variant="button">ต้องจ่าย</Typography></TableCell>
+              <TableCell><Typography variant="button">ให้</Typography></TableCell>
+            </TableRow>
+          </TableHead>
+          {
+            this.renderTableBody(this.state)
+          }
+        </Table>
+      </Paper>
+    </Fragment>
   }
 }
 
