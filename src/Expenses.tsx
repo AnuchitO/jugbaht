@@ -239,6 +239,18 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
               </Grid>
             )
           }
+          {
+            state.map((m: OwesMember) =>
+              <Grid item xs={4} md={3} key={'member-' + m.id}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                    label={m.name}
+                  />
+                </FormGroup>
+              </Grid>
+            )
+          }
         </Grid>
 
       </FormControl>
@@ -281,7 +293,7 @@ const useExpensesStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flex: "1 1 auto",
       flexWrap: "wrap",
-      maxHeight: '75vh',
+      height: '50vh',
       overflow: 'scroll',
     },
     third: {
