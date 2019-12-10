@@ -109,7 +109,7 @@ const Payer: React.FC<PayerProps> = (props) => {
 
   return (
     <Fragment>
-      <Badge badgeContent={'payer'} color='primary'>
+      <Badge badgeContent={'payer'} color='secondary'>
         <Chip
           id='bootstrap-input'
           size="medium"
