@@ -215,42 +215,6 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
               </Grid>
             )
           }
-          {
-            state.map((m: OwesMember) =>
-              <Grid item xs={4} md={3} key={'member-' + m.id}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
-                    label={m.name}
-                  />
-                </FormGroup>
-              </Grid>
-            )
-          }
-          {
-            state.map((m: OwesMember) =>
-              <Grid item xs={4} md={3} key={'member-' + m.id}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
-                    label={m.name}
-                  />
-                </FormGroup>
-              </Grid>
-            )
-          }
-          {
-            state.map((m: OwesMember) =>
-              <Grid item xs={4} md={3} key={'member-' + m.id}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
-                    label={m.name}
-                  />
-                </FormGroup>
-              </Grid>
-            )
-          }
         </Grid>
 
       </FormControl>
