@@ -24,68 +24,66 @@ import { AppState } from './store'
 import Expenses from './Expenses'
 import Summary from './Summary'
 
-const SimpleMenu: React.FC = () => {
-
-  return (
-    <div>
-      <Button aria-controls="simple-menu" aria-haspopup="true">
-        Open Menu
-      </Button>
-
-    </div>
-  );
-}
-
-
-
 type NavMenuProps = {
   naviagateTo: (path: string) => any
 }
 
 const NavMenu: React.FC<NavMenuProps> = (props) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const classes = useStyles()
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
-  const handleClose = (path: string) => {
-    setAnchorEl(null);
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const naviagateTo = (path: string) => {
+    handleClose()
     props.naviagateTo(path)
-  };
+  }
 
   return (
-    <Fragment>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton onClick={handleMenu} edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={() => handleClose("/")}>Expenses</MenuItem>
-              <MenuItem onClick={() => handleClose("/summary")}>Summary</MenuItem>
-            </Menu>
-          </IconButton>
-          <Typography variant="h6" >
-            Jugbaht
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          onClick={handleMenu}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          Jugbaht
           </Typography>
-        </Toolbar>
-      </AppBar>
-    </Fragment >
+        <div>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => naviagateTo("/")}>Expenses</MenuItem>
+            <MenuItem onClick={() => naviagateTo("/summary")}>Summary</MenuItem>
+          </Menu>
+        </div>
+      </Toolbar>
+    </AppBar>
   )
 }
 
@@ -112,49 +110,23 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexFlow: "column",
       height: "calc(100vh - 32px)",
+    },
+    menuButton: {
+      marginRight: theme.spacing(2)
+    },
+    title: {
+      flexGrow: 1
     }
   })
 )
 
 const App: React.FC<AppState> = (props) => {
   const classes = useStyles()
-  // return (
-  //   <div className="App">
-  //     <Router>
-  //       <Container maxWidth="md">
-  //         <Grid container>
-  //           <Grid item xs={12}>
-  //             {/* TODO: Add Nav bar redirect. */}
-  //             {/* <Nav />  */}
-  //             <ul>
-  //               <li><Link to="/">Expenses</Link></li>
-  //               <li><Link to="/summary">Summary</Link></li>
-  //             </ul>
-  //           </Grid>
-  //           <Grid item xs={12}>
-  //             <Route path="/" exact component={Expenses} />
-  //             <Route path="/summary" component={Summary} />
-  //           </Grid>
-  //         </Grid>
-  //       </Container>
-  //     </Router>
-
-  //   </div>
-  // )
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" >
-            Jugbaht
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Router>
+        <Nav />
         <Route path="/" exact component={Expenses} />
         <Route path="/summary" component={Summary} />
       </Router>
@@ -171,3 +143,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 // TODO: add initialize page setup
 // TODO: load default trip and redirect to expenses page.
+// TODO: slide right to open summary
