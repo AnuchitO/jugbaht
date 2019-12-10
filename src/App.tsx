@@ -3,13 +3,11 @@ import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   withRouter
 } from 'react-router-dom'
 import './App.css'
 import {
   AppBar,
-  Button,
   IconButton,
   Menu,
   MenuItem,
