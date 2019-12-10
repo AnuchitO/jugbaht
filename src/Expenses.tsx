@@ -4,11 +4,13 @@ import {
   Avatar,
   Badge,
   Button,
+  Box,
   Checkbox,
   Chip,
   Dialog,
   DialogTitle,
   Divider,
+  Typography,
   List,
   ListItem,
   ListItemAvatar,
@@ -112,6 +114,7 @@ const Payer: React.FC<PayerProps> = (props) => {
       <Badge badgeContent={'payer'} color='primary'>
         <Chip
           id='bootstrap-input'
+          size="medium"
           variant='outlined'
           avatar={<Avatar>{props.payer.name.slice(0, 2)}</Avatar>}
           label={props.payer.name}
@@ -212,6 +215,30 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
               </Grid>
             )
           }
+          {
+            state.map((m: OwesMember) =>
+              <Grid item xs={4} md={3} key={'member-' + m.id}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                    label={m.name}
+                  />
+                </FormGroup>
+              </Grid>
+            )
+          }
+          {
+            state.map((m: OwesMember) =>
+              <Grid item xs={4} md={3} key={'member-' + m.id}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                    label={m.name}
+                  />
+                </FormGroup>
+              </Grid>
+            )
+          }
         </Grid>
 
       </FormControl>
@@ -234,9 +261,42 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
     </Fragment>
   )
 }
-class Expenses extends React.Component<Props, {}> {
 
-  save({ amount, owes, note, payer }: ExpenseState) {
+const useExpensesStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      border: "2px solid red",
+      flex: "1 1 auto",
+    },
+    first: {
+      alignContent: "flex-start",
+      display: "flex",
+      flex: "1 1 auto",
+      flexWrap: "wrap",
+      height: '25vh',
+      maxWidth: '100%',
+      overflow: 'scroll',
+    },
+    second: {
+      display: "flex",
+      flex: "1 1 auto",
+      flexWrap: "wrap",
+      maxHeight: '75vh',
+      overflow: 'scroll',
+    },
+    third: {
+      alignContent: "flex-end",
+      display: "flex",
+      flex: "1 1 auto",
+      flexWrap: "wrap",
+    }
+  })
+);
+
+const Expenses: React.FC<Props> = (props) => {
+  const classes = useExpensesStyles()
+
+  const save = ({ amount, owes, note, payer }: ExpenseState) => {
     const record = {
       id: uuid(),
       amount,
@@ -247,49 +307,59 @@ class Expenses extends React.Component<Props, {}> {
 
     // TODO: add snackbar after success: https://material-ui.com/components/snackbars/#customized-snackbars
     // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
-    this.props.addExpense(record)
-    // TODO: clear amount state after submit
-    // this.props.history.push('/summary')
+    props.addExpense(record)
+    // TODO: clear amount state after save
+    // TODO: auto scroll history afte save
+    // props.history.push('/summary')
   }
 
-  render() {
-    return (
-      <Fragment>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            {/* TODO: hide top one when overflow */}
-            <ExpensesHistory records={this.props.expenses.records} />
-          </Grid>
-          <Grid item xs={12}>
-            <Divider variant='middle' />
-          </Grid>
-          {/* TODO: fix position of expense history and expense form */}
-          <Grid item xs={12}>
-            <ExpensesForm
-              updateOwes={this.props.updateOwes}
-              updateNote={this.props.updateNote}
-              note={this.props.expenses.note}
-              notes={this.props.expenses.notes}
-              members={this.props.expenses.members}
-              payer={this.props.expenses.payer}
-              changePayer={this.props.changePayer}
-            />
-          </Grid>
-          <Grid item xs={12} >
-            <Button
-              variant='contained'
-              color='primary'
-              size='large'
-              fullWidth
-              startIcon={<MonetizationOnOutlinedIcon />}
-              onClick={() => this.save(this.props.expenses)}>
-              Save
-            </Button>
-          </Grid>
-        </Grid>
-      </Fragment >
-    )
-  }
+  return (
+    <div className={classes.root}>
+      <Box className={classes.first}
+        border="2px solid white"
+        p={1} // padding
+        m={1} // marginTop
+      >
+        {/* // bgcolor="background.paper" */}
+        <ExpensesHistory records={props.expenses.records} />
+      </Box>
+      <Box
+        className={classes.second}
+        border="2px solid white"
+        p={1}
+        m={1}
+        bgcolor="red.300"
+      >
+        <Box p={1} m={1} bgcolor="grey.300">
+          {/* TODO: fix full screen desktop */}
+          <ExpensesForm
+            updateOwes={props.updateOwes}
+            updateNote={props.updateNote}
+            note={props.expenses.note}
+            notes={props.expenses.notes}
+            members={props.expenses.members}
+            payer={props.expenses.payer}
+            changePayer={props.changePayer}
+          />
+        </Box>
+      </Box>
+      <Box
+        className={classes.third}
+        border="2px solid green"
+        p={1}
+        m={1}>
+        <Button
+          variant='contained'
+          color='primary'
+          size='large'
+          fullWidth
+          startIcon={<MonetizationOnOutlinedIcon />}
+          onClick={() => save(props.expenses)}>
+          Save
+          </Button>
+      </Box>
+    </div>
+  )
 }
 
 export default withRouter(connect(

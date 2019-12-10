@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   Divider,
+  Box,
   FormControlLabel,
   Grid,
   List,
@@ -60,10 +61,26 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: 50,
     },
     list: {
-      marginBottom: theme.spacing(1),
+      display: "flex",
+      flexDirection: "column",
+      flexShrink: 0,
+      width: '100%',
+    },
+    listItem: {
+      display: "flex",
+      flexDirection: "column",
+      flexShrink: 0,
+      padding: 0,
+    },
+    item: {
+      padding: 0,
+      flexShrink: 0,
+      paddingBottom: '2px',
+      display: 'flex',
+      width: '100%',
     },
     subheader: {
-      backgroundColor: theme.palette.background.paper,
+
     },
     appBar: {
       top: 'auto',
@@ -89,50 +106,39 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
 
   return (
     <Fragment>
-      <Paper square>
-        <Typography variant="h6" gutterBottom>
-          History
-        </Typography>
-        <List className={classes.list}>
-          <Fragment>
-            {/* {id === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
-              {id === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>} */}
-            <ListItem>
-              <Grid container>
-                <Grid item xs={12}>
-                  {
-                    records.map((record: Record) => (
-                      <Grid container justify="center" spacing={1} key={uuid()}>
-                        <Grid item xs={1} className={classes.center}>
-                          <FastfoodOutlinedIcon />
-                        </Grid>
-                        <Grid item xs={8}>
-                          <Typography variant="button">
-                            {record.payer.name}
-                          </Typography>
-                          <FormHelperText className={classes.description}>
-                            paid for : {record.owes.map(o => o.name).join(",")}
-                          </FormHelperText>
-                          <Typography variant="caption">
-                            {record.note}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3} className={classes.center}>
-                          <Typography className={classes.amount} variant="h6" gutterBottom>
-                            ฿{record.amount}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    ))
-                  }
-                </Grid>
-              </Grid>
-            </ListItem>
-            <Divider variant="middle" />
-          </Fragment>
-        </List>
-      </Paper>
-    </Fragment>
+      <List className={classes.list}>
+        <Fragment>
+          {
+            records.map((record: Record, index) => (
+              <ListItem key={uuid()} className={classes.listItem} divider>
+                {index === 0 && <ListSubheader className={classes.subheader}>History</ListSubheader>}
+                {/*{index === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
+                {index === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>} */}
+
+                <Box display="flex" p={1} className={classes.item}>
+                  <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
+                  <Box p={1} flexGrow={5}>
+                    <Typography variant="button">
+                      {record.payer.name}
+                    </Typography>
+                    <FormHelperText className={classes.description}>
+                      paid for : {record.owes.map(o => o.name).join(",")}
+                    </FormHelperText>
+                    <Typography variant="caption">
+                      {record.note}
+                    </Typography>
+                  </Box>
+                  <Box p={1} flexGrow={1} className={classes.center}>
+                    <Typography className={classes.amount} variant="h6" gutterBottom>
+                      ฿{record.amount}
+                    </Typography></Box>
+                </Box>
+              </ListItem>
+            ))
+          }
+        </Fragment>
+      </List>
+    </Fragment >
   )
 }
 

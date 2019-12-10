@@ -42,19 +42,13 @@ const SimpleMenu: React.FC = () => {
   );
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    appBar: {
-    }
-  })
-);
+
 
 type NavMenuProps = {
   naviagateTo: (path: string) => any
 }
 
 const NavMenu: React.FC<NavMenuProps> = (props) => {
-  const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -69,7 +63,7 @@ const NavMenu: React.FC<NavMenuProps> = (props) => {
 
   return (
     <Fragment>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="static">
         <Toolbar>
           <IconButton onClick={handleMenu} edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
@@ -118,28 +112,59 @@ const Nav = withRouter(connect(
   (state: AppState) => ({}),
   {})(NavComponent));
 
-const App: React.FC<AppState> = (props) => {
-  return (
-    <div className="App">
-      <Router>
-        <Container maxWidth="md">
-          <Grid container>
-            <Grid item xs={12}>
-              {/* TODO: Add Nav bar redirect. */}
-              {/* <Nav />  */}
-              <ul>
-                <li><Link to="/">Expenses</Link></li>
-                <li><Link to="/summary">Summary</Link></li>
-              </ul>
-            </Grid>
-            <Grid item xs={12}>
-              <Route path="/" exact component={Expenses} />
-              <Route path="/summary" component={Summary} />
-            </Grid>
-          </Grid>
-        </Container>
-      </Router>
+const useStyles = makeStyles(theme =>
+  createStyles({
+    root: {
+      display: "flex",
+      flexFlow: "column",
+      height: "calc(100vh - 32px)",
+    }
+  })
 
+);
+
+const App: React.FC<AppState> = (props) => {
+  const classes = useStyles()
+  // return (
+  //   <div className="App">
+  //     <Router>
+  //       <Container maxWidth="md">
+  //         <Grid container>
+  //           <Grid item xs={12}>
+  //             {/* TODO: Add Nav bar redirect. */}
+  //             {/* <Nav />  */}
+  //             <ul>
+  //               <li><Link to="/">Expenses</Link></li>
+  //               <li><Link to="/summary">Summary</Link></li>
+  //             </ul>
+  //           </Grid>
+  //           <Grid item xs={12}>
+  //             <Route path="/" exact component={Expenses} />
+  //             <Route path="/summary" component={Summary} />
+  //           </Grid>
+  //         </Grid>
+  //       </Container>
+  //     </Router>
+
+  //   </div>
+  // )
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" >
+            News
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Router>
+        <Route path="/" exact component={Expenses} />
+        <Route path="/summary" component={Summary} />
+      </Router>
     </div>
   )
 }
