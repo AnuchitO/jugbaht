@@ -200,13 +200,13 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
       </FormControl>
       <FormControl component='fieldset' fullWidth className={classes.formControl}>
         <FormLabel component='legend'>Paid for</FormLabel>
-        <Grid container spacing={2}>
+        <Grid container>
           {
             state.map((m: OwesMember) =>
               <Grid item xs={4} md={3} key={'member-' + m.id}>
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox checked={m.checked} onChange={handleChange(m)} />}
+                    control={<Checkbox checked={m.checked} color="primary" onChange={handleChange(m)} />}
                     label={m.name}
                   />
                 </FormGroup>
