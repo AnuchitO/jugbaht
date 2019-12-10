@@ -42,6 +42,7 @@ import { Member, ExpenseState } from './store/expenses/types'
 
 type AmountProps = {
   updateAmount: typeof updateAmount
+  amount: number | string
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 const amount: React.FC<AmountProps> = (props) => {
@@ -69,13 +70,14 @@ const amount: React.FC<AmountProps> = (props) => {
       id={id}
       label='Amount'
       type='number'
+      value={props.amount}
       onKeyUp={onKeyUp}
       onChange={onchange} />
   )
 }
 
 
-const Amount = connect((state: AppState) => ({}), { updateAmount })(amount)
+const Amount = connect((state: AppState) => ({ amount: state.expenses.amount }), { updateAmount })(amount)
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -144,6 +146,7 @@ const Payer: React.FC<PayerProps> = (props) => {
 
 type Props = {
   expenses: ExpenseState
+  updateAmount: typeof updateAmount
   addExpense: typeof addExpense
   updateOwes: typeof updateOwes
   updateNote: typeof updateNote
@@ -287,7 +290,7 @@ const Expenses: React.FC<Props> = (props) => {
   };
 
   const save = ({ amount, owes, note, payer }: ExpenseState) => {
-    if (amount === 0) {
+    if (amount === 0 || amount === "") {
       // TODO: form valiation before submit
       alert("please input amount")
       return
@@ -300,7 +303,7 @@ const Expenses: React.FC<Props> = (props) => {
 
     const record = {
       id: uuid(),
-      amount,
+      amount: +amount,
       payer,
       owes,
       note
@@ -308,8 +311,9 @@ const Expenses: React.FC<Props> = (props) => {
 
     // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
     props.addExpense(record)
+    props.updateAmount("")
     popupSnackbar()
-    // TODO: clear amount state after save
+
     // TODO: auto scroll history afte save
     // props.history.push('/summary')
   }
@@ -354,6 +358,7 @@ const Expenses: React.FC<Props> = (props) => {
           variant='contained'
           color='primary'
           size='large'
+          disabled={!!!props.expenses.amount}
           fullWidth
           startIcon={<MonetizationOnOutlinedIcon />}
           onClick={() => save(props.expenses)}>
@@ -387,5 +392,6 @@ export default withRouter(connect(
     addExpense,
     updateOwes,
     updateNote,
-    changePayer
+    changePayer,
+    updateAmount
   })(Expenses));

@@ -14,7 +14,7 @@ export interface Record {
 }
 
 export interface ExpenseState {
-  amount: number
+  amount: number | string
   members: Member[]
   note: string
   notes: string[]

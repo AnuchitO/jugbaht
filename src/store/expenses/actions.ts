@@ -8,7 +8,7 @@ import {
   CHANGE_PAYER
 } from './types'
 
-export const updateAmount = (amount: number) => ({
+export const updateAmount = (amount: number | string) => ({
   type: UPDATE_AMOUNT,
   payload: amount
 })

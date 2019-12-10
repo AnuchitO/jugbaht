@@ -35,6 +35,7 @@ class Summary extends React.Component<Props, SummaryState> {
     let min = balances.reduce((p: any, c: any, index: number) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
 
     if (min.balance === 0 && max.balance === 0) {
+      // TODO: !!!!CRITICAL!!! :BUG: fix when no balance Max recursion exceed.
       return ledgers
     }
 

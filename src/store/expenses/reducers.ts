@@ -83,7 +83,7 @@ const initialState: ExpenseState = {
   ], // TODO: localstorage
   owes: allMembers,
   payer: { id: 4, name: "Sao" },
-  amount: 0,
+  amount: "",
   note: "Snack",
   notes: [
     "Food",
