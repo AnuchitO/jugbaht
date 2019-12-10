@@ -10,9 +10,6 @@ import './App.css'
 import {
   AppBar,
   Button,
-  Container,
-  Fab,
-  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -21,10 +18,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import {
-  Search as SearchIcon,
   Menu as MenuIcon,
-  Add as AddIcon,
-  More as MoreIcon,
 } from '@material-ui/icons'
 import { AppState } from './store'
 import Expenses from './Expenses'
@@ -112,7 +106,7 @@ const Nav = withRouter(connect(
   (state: AppState) => ({}),
   {})(NavComponent));
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
@@ -120,8 +114,7 @@ const useStyles = makeStyles(theme =>
       height: "calc(100vh - 32px)",
     }
   })
-
-);
+)
 
 const App: React.FC<AppState> = (props) => {
   const classes = useStyles()

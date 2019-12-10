@@ -9,8 +9,6 @@ import {
   Chip,
   Dialog,
   DialogTitle,
-  Divider,
-  Typography,
   List,
   ListItem,
   ListItemAvatar,
