@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, SyntheticEvent } from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   Avatar,
@@ -21,7 +21,8 @@ import {
   Grid,
   InputLabel,
   NativeSelect,
-  TextField
+  TextField,
+  Snackbar,
 } from '@material-ui/core'
 
 import {
@@ -31,6 +32,7 @@ import {
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
+import { SnackbarContentWrapper } from './SnackbarContentWrapper'
 import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
@@ -270,7 +272,32 @@ const useExpensesStyles = makeStyles((theme: Theme) =>
 const Expenses: React.FC<Props> = (props) => {
   const classes = useExpensesStyles()
 
+  const [open, setOpen] = React.useState(false);
+
+  const popupSnackbar = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const save = ({ amount, owes, note, payer }: ExpenseState) => {
+    if (amount === 0) {
+      // TODO: form valiation before submit
+      alert("please input amount")
+      return
+    }
+    if (owes.length === 0) {
+      // TODO: form valiation before submit
+      alert("please select member who you paid for.")
+      return
+    }
+
     const record = {
       id: uuid(),
       amount,
@@ -279,9 +306,9 @@ const Expenses: React.FC<Props> = (props) => {
       note
     }
 
-    // TODO: add snackbar after success: https://material-ui.com/components/snackbars/#customized-snackbars
     // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
     props.addExpense(record)
+    popupSnackbar()
     // TODO: clear amount state after save
     // TODO: auto scroll history afte save
     // props.history.push('/summary')
@@ -333,6 +360,23 @@ const Expenses: React.FC<Props> = (props) => {
           Save
           </Button>
       </Box>
+      <Fragment>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={open}
+          autoHideDuration={1000}
+          onClose={handleClose}
+        >
+          <SnackbarContentWrapper
+            onClose={handleClose}
+            variant="success"
+            message="success!"
+          />
+        </Snackbar>
+      </Fragment>
     </div>
   )
 }
