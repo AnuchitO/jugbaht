@@ -32,11 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
-    text: {
-    },
-    paper: {
-      paddingBottom: 50,
-    },
     list: {
       display: "flex",
       flexDirection: "column",
@@ -56,23 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       width: '100%',
     },
-    subheader: {
-
-    },
-    appBar: {
-      top: 'auto',
-      bottom: 0,
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    fabButton: {
-      position: 'absolute',
-      zIndex: 1,
-      top: -30,
-      left: 0,
-      right: 0,
-      margin: '0 auto',
+    ul: {
+      padding: 0,
     },
   }),
 );
@@ -83,40 +63,55 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
 
   return (
     <Fragment>
-      <List className={classes.list}>
-        <Fragment>
-          {
-            records.map((record: Record, index) => (
-              <ListItem key={uuid()} className={classes.listItem} divider>
-                {index === 0 && <ListSubheader className={classes.subheader}>History</ListSubheader>}
-                {/*{index === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
-                {index === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>} */}
-
-                <Box display="flex" p={1} className={classes.item}>
-                  <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
-                  <Box p={1} flexGrow={5}>
-                    <Typography variant="button">
-                      {record.payer.name}
-                    </Typography>
-                    <FormHelperText className={classes.description}>
-                      paid for : {record.owes.map(o => o.name).join(",")}
-                    </FormHelperText>
-                    <Typography variant="caption">
-                      {record.note}
-                    </Typography>
+      <List className={classes.list} subheader={<li />}>
+        <li >
+          <ul className={classes.ul}>
+            <ListSubheader>History</ListSubheader>
+            {
+              records.map((record: Record, index) => (
+                <ListItem key={uuid()} className={classes.listItem} divider>
+                  <Box display="flex" p={1} className={classes.item}>
+                    <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
+                    <Box p={1} flexGrow={5}>
+                      <Typography variant="button">
+                        {record.payer.name}
+                      </Typography>
+                      <FormHelperText className={classes.description}>
+                        paid for : {record.owes.map(o => o.name).join(",")}
+                      </FormHelperText>
+                      <Typography variant="caption">
+                        {record.note}
+                      </Typography>
+                    </Box>
+                    <Box p={1} flexGrow={1} className={classes.center}>
+                      <Typography className={classes.amount} variant="h6" gutterBottom>
+                        ฿{record.amount}
+                      </Typography></Box>
                   </Box>
-                  <Box p={1} flexGrow={1} className={classes.center}>
-                    <Typography className={classes.amount} variant="h6" gutterBottom>
-                      ฿{record.amount}
-                    </Typography></Box>
-                </Box>
-              </ListItem>
-            ))
-          }
-        </Fragment>
+                </ListItem>
+              ))
+            }
+          </ul>
+        </li>
       </List>
-    </Fragment >
+    </Fragment>
   )
+  // return (
+  //   <Fragment>
+  //     <List className={classes.list}>
+  //       <li >
+  //         <ul>
+  //           <ListSubheader className={classes.subheader}>History</ListSubheader>
+  //           {/*{index === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
+  //               {index === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>} */}
+
+
+  //         </ul>
+  //       </li>
+
+  //     </List>
+  //   </Fragment >
+  // )
 }
 
 export default ExpensesHistory
