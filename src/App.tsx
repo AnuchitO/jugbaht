@@ -157,7 +157,7 @@ const App: React.FC<AppState> = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" >
-            News
+            Jugbaht
           </Typography>
         </Toolbar>
       </AppBar>
