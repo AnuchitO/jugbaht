@@ -277,7 +277,7 @@ const ExpensesForm: React.FC<ExpensesFormProps> = (props) => {
 const useExpensesStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      border: "2px solid red",
+      // border: "2px solid red",
       flex: "1 1 auto",
     },
     first: {
@@ -328,7 +328,7 @@ const Expenses: React.FC<Props> = (props) => {
   return (
     <div className={classes.root}>
       <Box className={classes.first}
-        border="2px solid white"
+        // border="2px solid white"
         p={1} // padding
         m={1} // marginTop
       >
@@ -342,7 +342,8 @@ const Expenses: React.FC<Props> = (props) => {
         m={1}
         bgcolor="red.300"
       >
-        <Box p={1} m={1} bgcolor="grey.300">
+        {/* bgcolor="grey.300" */}
+        <Box p={1} m={1} >
           {/* TODO: fix full screen desktop */}
           <ExpensesForm
             updateOwes={props.updateOwes}
@@ -357,7 +358,7 @@ const Expenses: React.FC<Props> = (props) => {
       </Box>
       <Box
         className={classes.third}
-        border="2px solid green"
+        // border="2px solid green"
         p={1}
         m={1}>
         <Button
