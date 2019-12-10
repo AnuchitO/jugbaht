@@ -54,6 +54,13 @@ const useStyles = makeStyles((theme: Theme) =>
     ul: {
       padding: 0,
     },
+    noRecord: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: '100%',
+      height: '100%',
+    }
   }),
 );
 
@@ -61,57 +68,45 @@ const useStyles = makeStyles((theme: Theme) =>
 const ExpensesHistory: React.FC<Props> = ({ records }) => {
   const classes = useStyles();
 
-  return (
-    <Fragment>
-      <List className={classes.list} subheader={<li />}>
-        <li >
-          <ul className={classes.ul}>
-            <ListSubheader>History</ListSubheader>
-            {
-              records.map((record: Record, index) => (
-                <ListItem key={uuid()} className={classes.listItem} divider>
-                  <Box display="flex" p={1} className={classes.item}>
-                    <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
-                    <Box p={1} flexGrow={5}>
-                      <Typography variant="button">
-                        {record.payer.name}
-                      </Typography>
-                      <FormHelperText className={classes.description}>
-                        paid for : {record.owes.map(o => o.name).join(",")}
-                      </FormHelperText>
-                      <Typography variant="caption">
-                        {record.note}
-                      </Typography>
+  return (records.length === 0) ?
+    <Box p={1} className={classes.noRecord}>
+      <Typography variant="button">NO RECORD</Typography>
+    </Box>
+    : (
+      <Fragment>
+        <List className={classes.list} subheader={<li />}>
+          <li >
+            <ul className={classes.ul}>
+              <ListSubheader>History</ListSubheader>
+              {
+                records.map((record: Record, index) => (
+                  <ListItem key={uuid()} className={classes.listItem} divider>
+                    <Box display="flex" p={1} className={classes.item}>
+                      <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
+                      <Box p={1} flexGrow={5}>
+                        <Typography variant="button">
+                          {record.payer.name}
+                        </Typography>
+                        <FormHelperText className={classes.description}>
+                          paid for : {record.owes.map(o => o.name).join(",")}
+                        </FormHelperText>
+                        <Typography variant="caption">
+                          {record.note}
+                        </Typography>
+                      </Box>
+                      <Box p={1} flexGrow={1} className={classes.center}>
+                        <Typography className={classes.amount} variant="h6" gutterBottom>
+                          ฿{record.amount}
+                        </Typography></Box>
                     </Box>
-                    <Box p={1} flexGrow={1} className={classes.center}>
-                      <Typography className={classes.amount} variant="h6" gutterBottom>
-                        ฿{record.amount}
-                      </Typography></Box>
-                  </Box>
-                </ListItem>
-              ))
-            }
-          </ul>
-        </li>
-      </List>
-    </Fragment>
-  )
-  // return (
-  //   <Fragment>
-  //     <List className={classes.list}>
-  //       <li >
-  //         <ul>
-  //           <ListSubheader className={classes.subheader}>History</ListSubheader>
-  //           {/*{index === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
-  //               {index === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>} */}
-
-
-  //         </ul>
-  //       </li>
-
-  //     </List>
-  //   </Fragment >
-  // )
+                  </ListItem>
+                ))
+              }
+            </ul>
+          </li>
+        </List>
+      </Fragment>
+    )
 }
 
 export default ExpensesHistory
