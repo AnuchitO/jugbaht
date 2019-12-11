@@ -292,12 +292,12 @@ const Expenses: React.FC<Props> = (props) => {
   };
 
   const scrollIntoLastHistoryItem = () => {
-    var nodes = document.querySelectorAll('#id-history > li')
-    if (nodes.length <= 3) {
+    const node = document.getElementById("id-last-history-item-dummy")
+    if (!node) {
       return
     }
-    var last = nodes[nodes.length - 1];
-    last.scrollIntoView()
+
+    node.scrollIntoView(true)
   }
 
   const save = ({ amount, owes, note, payer }: ExpenseState) => {

@@ -76,7 +76,7 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
       <Fragment>
         <List className={classes.list} subheader={<li />}>
           <li >
-            <ul className={classes.ul} id="id-history">
+            <ul className={classes.ul}>
               <ListSubheader>History</ListSubheader>
               {
                 records.map((record: Record, index) => (
@@ -102,6 +102,7 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
                   </ListItem>
                 ))
               }
+              <ListItem className={classes.listItem} id="id-last-history-item-dummy"></ListItem>
             </ul>
           </li>
         </List>
