@@ -291,6 +291,7 @@ const Expenses: React.FC<Props> = (props) => {
     setOpen(false);
   };
 
+  // TODO: move auto scroll into ExpensesHistory component.
   const scrollIntoLastHistoryItem = () => {
     const node = document.getElementById("id-last-history-item-dummy")
     if (!node) {
