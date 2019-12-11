@@ -33,6 +33,7 @@ import {
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import { SnackbarContentWrapper } from './SnackbarContentWrapper'
+import { FormattedInputs } from './NumberFormatInput'
 import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
@@ -66,13 +67,14 @@ const amount: React.FC<AmountProps> = (props) => {
 
 
   return (
-    <TextField variant='outlined' required fullWidth
-      id={id}
-      label='Amount'
-      type='number'
-      value={props.amount}
-      onKeyUp={onKeyUp}
-      onChange={onchange} />
+    // <TextField variant='outlined' required fullWidth
+    //   id={id}
+    //   label='Amount'
+    //   type='number'
+    //   value={props.amount}
+    //   onKeyUp={onKeyUp}
+    //   onChange={onchange} />
+    <FormattedInputs updateAmount={props.updateAmount} onKeyUp={onKeyUp} />
   )
 }
 
