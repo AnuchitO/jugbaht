@@ -12,6 +12,7 @@ import {
   Typography,
   TableRow,
 } from '@material-ui/core'
+import { reckon } from './Reckon'
 
 type Ledgers = { creditor: Member, amount: number, debtor: Member }[]
 type SummaryState = {
@@ -30,37 +31,6 @@ class Summary extends React.Component<Props, SummaryState> {
     }
   }
 
-  reckon(balances: any, ledgers: Ledgers): any {
-    let max = balances.reduce((p: any, c: any, index: number) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
-    let min = balances.reduce((p: any, c: any, index: number) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
-
-    if (min.balance === 0 && max.balance === 0) {
-      return ledgers
-    }
-
-    let diff = Math.min(max.balance, -min.balance)
-    let reBalances = balances.map((b: any, index: number) => {
-      if (index === max.index) {  // creditor
-        // TODO: !!!!CRITICAL!!! :BUG: fix when no balance Max recursion exceed.
-        return { ...b, balance: b.balance - diff }
-      }
-
-      if (index === min.index) { // debtor
-        return { ...b, balance: b.balance + diff }
-      }
-
-      return b
-    })
-
-    ledgers.push({
-      debtor: min.member,
-      amount: diff,
-      creditor: max.member
-    })
-
-    return this.reckon(reBalances, ledgers)
-  }
-
   initialize() {
     const { records, members } = this.props.expenses
     const wallets = members.map(m => ({
@@ -75,7 +45,7 @@ class Summary extends React.Component<Props, SummaryState> {
     }))
 
     return {
-      ledgers: this.reckon(balances, [])
+      ledgers: reckon(balances, [])
     }
   }
   renderTableBody({ ledgers }: SummaryState) {
