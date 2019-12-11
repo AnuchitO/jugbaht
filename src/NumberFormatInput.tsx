@@ -15,6 +15,9 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
   return (
     <NumberFormat
       {...other}
+      inputMode="numeric"
+      autoComplete='off'
+      inputProps={{ pattern: "[0-9]*" }}
       getInputRef={inputRef}
       onValueChange={values => {
         onChange({
@@ -69,8 +72,6 @@ export const FormattedInputs: React.FC<Props> = (props) => {
         <TextField
           label="amount"
           id="id-input-amount"
-          inputMode="numeric"
-          inputProps={{ pattern: "[0-9]*" }}
           value={values.numberformat}
           onChange={handleChange("numberformat")}
           onKeyUp={props.onKeyUp}
