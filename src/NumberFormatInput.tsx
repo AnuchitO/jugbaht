@@ -69,6 +69,8 @@ export const FormattedInputs: React.FC<Props> = (props) => {
         <TextField
           label="amount"
           id="id-input-amount"
+          inputMode="numeric"
+          inputProps={{ pattern: "[0-9]*" }}
           value={values.numberformat}
           onChange={handleChange("numberformat")}
           onKeyUp={props.onKeyUp}
