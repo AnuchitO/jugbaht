@@ -17,7 +17,7 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
       {...other}
       inputMode="numeric"
       autoComplete='off'
-      inputProps={{ pattern: "[0-9]*" }}
+      inputprops={{ pattern: "[0-9]*" }}
       getInputRef={inputRef}
       onValueChange={values => {
         onChange({
