@@ -1,6 +1,7 @@
 import {
   ExpenseState,
   ExpenseActionsTypes,
+  INIT_EXPENSE_RECORDS,
   UPDATE_AMOUNT,
   UPDATE_NOTE,
   ADD_EXPENSE,
@@ -124,6 +125,11 @@ export function expenseReducer(
       return {
         ...state,
         payer: action.payload
+      }
+    case INIT_EXPENSE_RECORDS:
+      return {
+        ...state,
+        records: action.payload
       }
     default:
       return state;

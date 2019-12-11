@@ -1,4 +1,5 @@
 import {
+  LOAD_EXPENSE_RECORDS,
   ADD_EXPENSE,
   Member,
   Record,
@@ -31,4 +32,8 @@ export const updateOwes = (owes: Member[]) => ({
 export const changePayer = (payer: Member) => ({
   type: CHANGE_PAYER,
   payload: payer
+})
+
+export const loadExpenseRecords = () => ({
+  type: LOAD_EXPENSE_RECORDS
 })

@@ -23,6 +23,22 @@ export interface ExpenseState {
   records: Record[]
 }
 
+// sagas
+export const LOAD_EXPENSE_RECORDS = "LOAD_EXPENSE_RECORDS"
+export const INIT_EXPENSE_RECORDS = "INIT_EXPENSE_RECORDS"
+
+
+interface LoadExpenseRecords {
+  type: typeof LOAD_EXPENSE_RECORDS
+  payload: Record[]
+}
+
+interface InitExpenseRecords {
+  type: typeof INIT_EXPENSE_RECORDS
+  payload: Record[]
+}
+
+// redux
 export const UPDATE_AMOUNT = "UPDATE_AMOUNT"
 export const UPDATE_NOTE = "UPDATE_NOTE"
 export const UPDATE_OWES = "UPDATE_OWES"
@@ -54,4 +70,4 @@ interface ChangePayer {
   payload: Member
 }
 
-export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateOwes | AddExpense | ChangePayer
+export type ExpenseActionsTypes = UpdateAmountAction | UpdateNoteAction | UpdateOwes | AddExpense | ChangePayer | InitExpenseRecords | LoadExpenseRecords
