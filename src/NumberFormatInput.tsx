@@ -33,6 +33,7 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
 interface Props {
   onKeyUp: (event: React.KeyboardEvent<HTMLDivElement>) => any
   updateAmount: typeof updateAmount
+  amount: number | string
 }
 
 
@@ -44,6 +45,12 @@ export const FormattedInputs: React.FC<Props> = (props) => {
   const [values, setValues] = React.useState<State>({
     numberformat: ""
   });
+
+  React.useEffect(() => {
+    if (props.amount === "") {
+      setValues({ ...values, numberformat: "" })
+    }
+  }, [props.amount])
 
   const handleChange = (name: keyof State) => (
     event: React.ChangeEvent<HTMLInputElement>

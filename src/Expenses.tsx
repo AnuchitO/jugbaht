@@ -74,7 +74,7 @@ const amount: React.FC<AmountProps> = (props) => {
     //   value={props.amount}
     //   onKeyUp={onKeyUp}
     //   onChange={onchange} />
-    <FormattedInputs updateAmount={props.updateAmount} onKeyUp={onKeyUp} />
+    <FormattedInputs amount={props.amount} updateAmount={props.updateAmount} onKeyUp={onKeyUp} />
   )
 }
 
