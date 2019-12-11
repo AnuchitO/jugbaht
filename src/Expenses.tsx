@@ -324,10 +324,11 @@ const Expenses: React.FC<Props> = (props) => {
     // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
     props.addExpense(record)
     props.updateAmount("")
+    // TODO: auto scroll history afte save move it to History component.
     scrollIntoLastHistoryItem()
     popupSnackbar()
 
-    // TODO: auto scroll history afte save
+
     // props.history.push('/summary')
   }
 

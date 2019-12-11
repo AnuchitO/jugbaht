@@ -1,7 +1,7 @@
 
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { Record } from '../expenses/types'
-import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS } from '../expenses/types';
+import { Record, AddExpense } from '../expenses/types'
+import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS, ADD_EXPENSE } from '../expenses/types';
 
 const key = "records"
 
@@ -11,10 +11,20 @@ export function* initExpenseRecords() {
   yield put({ type: INIT_EXPENSE_RECORDS, payload: records });
 }
 
-export function* loadExpenseRecords() {
+export function* addExpenseRecord(action: AddExpense) {
+  const record = action.payload
+  const recoredRaw: string = localStorage.getItem(key) || "[]";
+  const records: Record[] = JSON.parse(recoredRaw)
+  records.push(record)
+  const dataString = JSON.stringify(records);
+  localStorage.setItem(key, dataString);
+}
+
+export function* expensesSagas() {
   yield takeLatest(LOAD_EXPENSE_RECORDS, initExpenseRecords);
+  yield takeEvery(ADD_EXPENSE, addExpenseRecord)
 }
 
 export default function* rootSaga() {
-  yield all([loadExpenseRecords()]);
+  yield all([expensesSagas()]);
 }

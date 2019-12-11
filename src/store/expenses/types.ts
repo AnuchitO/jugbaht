@@ -60,7 +60,7 @@ interface UpdateOwes {
   payload: Member[]
 }
 
-interface AddExpense {
+export interface AddExpense {
   type: typeof ADD_EXPENSE
   payload: Record
 }
