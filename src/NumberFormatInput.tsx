@@ -65,7 +65,7 @@ export const FormattedInputs: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <FormControl>
+      <FormControl fullWidth>
         <TextField
           label="amount"
           id="id-input-amount"
