@@ -1,5 +1,5 @@
 
-import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { Record } from '../expenses/types'
 import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS } from '../expenses/types';
 
@@ -12,7 +12,7 @@ export function* initExpenseRecords() {
 }
 
 export function* loadExpenseRecords() {
-  yield takeEvery(LOAD_EXPENSE_RECORDS, initExpenseRecords);
+  yield takeLatest(LOAD_EXPENSE_RECORDS, initExpenseRecords);
 }
 
 export default function* rootSaga() {
