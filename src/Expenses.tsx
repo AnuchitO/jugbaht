@@ -60,7 +60,7 @@ const amount: React.FC<AmountProps> = (props) => {
 
   const hideKeyboard = (keyCode: number) => {
     if (keyCode === 13) {
-      const el: any = document.querySelector('#amount')
+      const el: any = document.querySelector('#id-input-amount')
       el.blur()
     }
   }
