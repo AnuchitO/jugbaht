@@ -289,6 +289,15 @@ const Expenses: React.FC<Props> = (props) => {
     setOpen(false);
   };
 
+  const scrollIntoLastHistoryItem = () => {
+    var nodes = document.querySelectorAll('#id-history > li')
+    if (nodes.length <= 3) {
+      return
+    }
+    var last = nodes[nodes.length - 1];
+    last.scrollIntoView()
+  }
+
   const save = ({ amount, owes, note, payer }: ExpenseState) => {
     if (amount === 0 || amount === "") {
       // TODO: form valiation before submit
@@ -312,11 +321,14 @@ const Expenses: React.FC<Props> = (props) => {
     // TODO: BUG : first time open and save then try to go to /summary it broken. (open form a Line app)
     props.addExpense(record)
     props.updateAmount("")
+    scrollIntoLastHistoryItem()
     popupSnackbar()
 
     // TODO: auto scroll history afte save
     // props.history.push('/summary')
   }
+
+
 
   return (
     <div className={classes.root}>
