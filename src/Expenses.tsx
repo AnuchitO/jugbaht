@@ -315,7 +315,7 @@ const Expenses: React.FC<Props> = (props) => {
 
     const record = {
       id: uuid(),
-      amount: +amount,
+      amount: Math.abs(+amount),
       payer,
       owes,
       note
