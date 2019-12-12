@@ -12,7 +12,7 @@ import {
   Typography,
   TableRow,
 } from '@material-ui/core'
-import { reckon } from './Reckon'
+import { reckon, doBalances } from './Reckon'
 
 type Ledgers = { creditor: Member, amount: number, debtor: Member }[]
 type SummaryState = {
@@ -33,21 +33,14 @@ class Summary extends React.Component<Props, SummaryState> {
 
   initialize() {
     const { records, members } = this.props.expenses
-    const wallets = members.map(m => ({
-      member: m,
-      credit: records.reduce((prev, curr) => (curr.payer.id === m.id) ? curr.amount + prev : prev, 0.0),
-      debt: records.reduce((prev, curr) => (curr.owes.some(o => o.id === m.id)) ? (curr.amount / curr.owes.length) + prev : prev, 0.0)
-    }))
 
-    const balances = wallets.map(w => ({
-      member: w.member,
-      balance: w.credit - w.debt
-    }))
+    const balances = doBalances(records, members)
 
     return {
       ledgers: reckon(balances, [])
     }
   }
+
   renderTableBody({ ledgers }: SummaryState) {
     return (
       <TableBody>
