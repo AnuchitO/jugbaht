@@ -21,7 +21,6 @@ import {
   Grid,
   InputLabel,
   NativeSelect,
-  TextField,
   Snackbar,
 } from '@material-ui/core'
 
@@ -47,11 +46,10 @@ type AmountProps = {
 }
 // TODO: change to number format : https://material-ui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 const amount: React.FC<AmountProps> = (props) => {
-  const id = 'amount'
-  const onchange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    props.updateAmount(+event.currentTarget.value)
-  }
+  // const onchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   event.preventDefault()
+  //   props.updateAmount(+event.currentTarget.value)
+  // }
 
   const onKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
     event.preventDefault()

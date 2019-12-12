@@ -17,7 +17,7 @@ export function* addExpenseRecord(action: AddExpense) {
   const records: Record[] = JSON.parse(recoredRaw)
   records.push(record)
   const dataString = JSON.stringify(records);
-  localStorage.setItem(key, dataString);
+  yield localStorage.setItem(key, dataString);
 }
 
 export function* expensesSagas() {
