@@ -63,3 +63,26 @@ test('reckon shoule be success', () => {
   ]
   expect(actual).toEqual(expected)
 })
+
+test('should do simplify paid', () => {
+  const records = [{ "id": "17844cce-f337-4c53-855d-a30df55dc398", "amount": 50, "payer": { "id": 4, "name": "Sao" }, "owes": [{ "id": 1, "name": "AnuchitO" }, { "id": 2, "name": "Kob" }, { "id": 3, "name": "Tom" }, { "id": 4, "name": "Sao" }, { "id": 5, "name": "Pan" }], "note": "Snack" }, { "id": "36151fd2-0662-4ae8-abce-1b4456ff98b7", "amount": 50, "payer": { "id": 4, "name": "Sao" }, "owes": [{ "id": 1, "name": "AnuchitO" }, { "id": 2, "name": "Kob" }, { "id": 3, "name": "Tom" }, { "id": 4, "name": "Sao" }, { "id": 5, "name": "Pan" }], "note": "Snack" }, { "id": "e552771a-381c-4e43-b2ae-8b6cb040d96a", "amount": 250, "payer": { "id": 1, "name": "AnuchitO" }, "owes": [{ "id": 1, "name": "AnuchitO" }, { "id": 2, "name": "Kob" }, { "id": 3, "name": "Tom" }, { "id": 4, "name": "Sao" }, { "id": 5, "name": "Pan" }], "note": "Fuel" }]
+
+  const members = [
+    { id: 1, name: "AnuchitO" },
+    { id: 2, name: "Kob" },
+    { id: 3, name: "Tom" },
+    { id: 4, name: "Sao" },
+    { id: 5, name: "Pan" }
+  ]
+  const balances = doBalances(records, members)
+
+  const actual = reckon(balances, [])
+
+  const expected = [
+    { "debtor": { "id": 2, "name": "Kob" }, "amount": 70, "creditor": { "id": 1, "name": "AnuchitO" } },
+    { "debtor": { "id": 3, "name": "Tom" }, "amount": 70, "creditor": { "id": 1, "name": "AnuchitO" } },
+    { "debtor": { "id": 5, "name": "Pan" }, "amount": 40, "creditor": { "id": 1, "name": "AnuchitO" } },
+    { "debtor": { "id": 5, "name": "Pan" }, "amount": 30, "creditor": { "id": 4, "name": "Sao" } }
+  ]
+  expect(actual).toEqual(expected)
+})
