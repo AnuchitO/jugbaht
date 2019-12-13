@@ -6,6 +6,7 @@ export interface Member {
 
 export type RecordID = string
 export interface Record {
+  _id?: string
   id: RecordID
   amount: number
   payer: Member
