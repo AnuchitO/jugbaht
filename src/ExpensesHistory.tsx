@@ -78,7 +78,7 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
           <li >
             <ul className={classes.ul}>
               <ListSubheader>History</ListSubheader>
-              {/* TODO: slide delete item when typo */}
+              {/* TODO: IMPORTANT slide delete item when typo */}
               {
                 records.map((record: Record, index) => (
                   <ListItem key={uuid()} className={classes.listItem} divider>

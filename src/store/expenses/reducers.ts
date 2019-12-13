@@ -18,75 +18,13 @@ const allMembers = [
 ] // TODO: make sure initialize owes and members as the same
 
 const initialState: ExpenseState = {
-  records: [
-    {
-      id: 'e1e8e3d2-1fa6-4e88-9dae-103c8289011a',
-      amount: 100,
-      payer: {
-        id: 4,
-        name: 'Sao'
-      },
-      owes: [
-        {
-          id: 1,
-          name: 'AnuchitO'
-        },
-        {
-          id: 2,
-          name: 'Kob'
-        },
-        {
-          id: 3,
-          name: 'Tom'
-        },
-        {
-          id: 4,
-          name: 'Sao'
-        },
-        {
-          id: 5,
-          name: 'Pan'
-        }
-      ],
-      note: 'Snack'
-    },
-    {
-      id: '441282cb-5eb0-4ee8-ba4a-41d574444487',
-      amount: 800,
-      payer: {
-        id: 4,
-        name: 'Sao'
-      },
-      owes: [
-        {
-          id: 1,
-          name: 'AnuchitO'
-        },
-        {
-          id: 2,
-          name: 'Kob'
-        },
-        {
-          id: 3,
-          name: 'Tom'
-        },
-        {
-          id: 4,
-          name: 'Sao'
-        },
-        {
-          id: 5,
-          name: 'Pan'
-        }
-      ],
-      note: 'Fuel'
-    }
-  ], // TODO: localstorage
+  records: [],
   owes: allMembers,
   payer: { id: 4, name: "Sao" },
   amount: "",
   note: "Snack",
   notes: [
+    "อื่นๆ",
     "Food",
     "Drink",
     "Snack",
