@@ -5,8 +5,8 @@ import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS, ADD_EXPENSE } from '../expe
 import { async } from 'q';
 
 const key = "records"
-// const urlApi = 'https://jugbaht-api.herokuapp.com/records';
-const urlApi = 'http://localhost:8080/records';
+const urlApi = 'https://jugbaht-api.herokuapp.com/records';
+// const urlApi = 'http://localhost:8080/records';
 const optionsDelete = {
   method: 'DELETE',
   headers: {
@@ -71,14 +71,6 @@ type GetAllRecordsType = {
 }
 
 const getAllRecords = async (): Promise<GetAllRecordsType> => {
-  // const options = {
-  //   method: 'GET',
-  //   headers: {
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'application/json;charset=UTF-8'
-  //   }
-  // }
-
   try {
     const response = await fetch(urlApi)
     const records = await response.json()
@@ -88,23 +80,6 @@ const getAllRecords = async (): Promise<GetAllRecordsType> => {
     return { records: [], error: e }
   }
 }
-
-// [
-//   {
-//     "id": "90db3a9d-aff0-4141-b723-b447fb78105a",
-//     "markDelete": true,
-//     "_id": ""
-//   },
-//   {
-//     "id": "90db3a9d-aff0-4141-b723-b447fb78105a",
-//     "markDelete": true,
-//     "_id": "5df33b6d475c880004e7c83a"
-//   },
-//   {
-//     "id": "e29b62fc-c037-4b81-ab08-6a8305222d43",
-//     "_id": ""
-//   }
-// ]
 
 export function* initExpenseRecords() {
   const recoredRaw: string = localStorage.getItem(key) || "[]";
