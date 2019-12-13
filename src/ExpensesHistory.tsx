@@ -12,7 +12,6 @@ import {
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
 import { Delete as DeleteIcon } from '@material-ui/icons'
 import { deleteExpense } from './store/expenses/actions'

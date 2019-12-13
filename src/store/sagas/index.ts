@@ -2,14 +2,146 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { Record, AddExpense, DELETE_EXPENSE } from '../expenses/types'
 import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS, ADD_EXPENSE } from '../expenses/types';
+import { async } from 'q';
 
 const key = "records"
-const url = 'https://jugbaht-api.herokuapp.com/records';
+// const urlApi = 'https://jugbaht-api.herokuapp.com/records';
+const urlApi = 'http://localhost:8080/records';
+const optionsDelete = {
+  method: 'DELETE',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8'
+  }
+}
+
+type DeleteTypes = {
+  success: { "_id": string }[]
+  fails: any
+  error: any
+}
+
+const deleteAll = async (urls: string[]): Promise<DeleteTypes> => {
+  try {
+    const resps = await Promise.all(urls.map(_url => fetch(_url, optionsDelete)))
+    const success = await Promise.all(resps.filter(r => r.ok).map(r => r.json()))
+    const fails = await Promise.all(resps.filter(r => !r.ok).map(r => r.json()))
+
+    return {
+      success: success || [],
+      fails: fails || [],
+      error: null
+    }
+  } catch (e) {
+    console.log(`delete all error:`)
+    console.log(e)
+    return { success: [], fails: [], error: e }
+  }
+}
+
+type CreateTypes = {
+  success: Record[],
+  error: any
+}
+
+const createAll = async (records: Record[]): Promise<CreateTypes> => {
+  try {
+    const resps = await Promise.all(records.map(record => {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify(record)
+      }
+      return fetch(urlApi, options);
+    }))
+
+    const success = await Promise.all(resps.filter(r => r.ok).map(r => r.json()))
+    return { success, error: null }
+  } catch (e) {
+    return { success: [], error: e }
+  }
+}
+
+type GetAllRecordsType = {
+  records: Record[]
+  error: any
+}
+
+const getAllRecords = async (): Promise<GetAllRecordsType> => {
+  // const options = {
+  //   method: 'GET',
+  //   headers: {
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json;charset=UTF-8'
+  //   }
+  // }
+
+  try {
+    const response = await fetch(urlApi)
+    const records = await response.json()
+    console.log(`records: ${records}`)
+    return { records, error: null }
+  } catch (e) {
+    return { records: [], error: e }
+  }
+}
+
+// [
+//   {
+//     "id": "90db3a9d-aff0-4141-b723-b447fb78105a",
+//     "markDelete": true,
+//     "_id": ""
+//   },
+//   {
+//     "id": "90db3a9d-aff0-4141-b723-b447fb78105a",
+//     "markDelete": true,
+//     "_id": "5df33b6d475c880004e7c83a"
+//   },
+//   {
+//     "id": "e29b62fc-c037-4b81-ab08-6a8305222d43",
+//     "_id": ""
+//   }
+// ]
 
 export function* initExpenseRecords() {
-  const recoredRaw: string = localStorage.getItem(key) || '[]';
-  const records: Record[] = JSON.parse(recoredRaw)
-  yield put({ type: INIT_EXPENSE_RECORDS, payload: records });
+  const recoredRaw: string = localStorage.getItem(key) || "[]";
+  let records: Record[] = JSON.parse(recoredRaw)
+
+  // DELETE alll
+  const markAsDeletes = records
+    .filter((r: Record) => r.makeAsDelete && !!r._id)
+    .map((r: Record) => `${urlApi}/${r._id}`)
+  console.log(`markAsDeletes: ${JSON.stringify(markAsDeletes, null, 2)}`)
+
+  const deletedRecords: DeleteTypes = yield deleteAll(markAsDeletes)
+  console.log(`deletedIDs: ${JSON.stringify(deletedRecords, null, 2)}`)
+  const deletedIDs = deletedRecords.success.map(r => r._id)
+
+  // clear all deteled
+  records = records.filter(r => !deletedIDs.includes(r._id || ""))
+  records = records.filter(r => !r.makeAsDelete)
+
+  // CREATE ALL
+  const waitForCreate = records.filter((r: Record) => !r._id)
+  console.log(`waitForCreate: ${JSON.stringify(waitForCreate, null, 2)}`)
+  const createdRecords = yield createAll(waitForCreate)
+  console.log(`createdRecords: ${JSON.stringify(createdRecords, null, 2)}`)
+
+  const createdIDs = createdRecords.success.map((r: Record) => r.id)
+  records = records.filter(r => !createdIDs.includes(r.id))
+
+  records = records.filter(r => !r._id)
+
+  // GET ALL
+  const allRecords = yield getAllRecords()
+  const _records = [...allRecords.records, ...records]
+
+  const dataString = JSON.stringify(_records);
+  yield localStorage.setItem(key, dataString);
+  yield put({ type: INIT_EXPENSE_RECORDS, payload: _records });
 }
 
 export function* addExpenseRecord(action: AddExpense) {
@@ -25,13 +157,13 @@ export function* addExpenseRecord(action: AddExpense) {
   };
 
   try {
-    const response = yield call(fetch, url, options);
+    const response = yield call(fetch, urlApi, options);
     if (response.ok) {
       const record_response = yield call([response, 'json']);
       record._id = record_response._id
     }
   } catch (e) {
-    console.log(`error: ${e}`)
+    console.log(`error: ${e} `)
   } finally {
     const recoredRaw: string = localStorage.getItem(key) || "[]";
     const records: Record[] = JSON.parse(recoredRaw)
@@ -52,16 +184,8 @@ export function* deleteExpenseRecord(action: AddExpense) {
     return
   }
 
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  }
-
   try {
-    const response = yield call(fetch, `${url}/${record._id}`, options);
+    const response = yield call(fetch, `${urlApi}/${record._id}`, optionsDelete);
     if (response.ok) {
       const dataString = JSON.stringify(records.filter(r => r.id !== record.id));
       yield localStorage.setItem(key, dataString);

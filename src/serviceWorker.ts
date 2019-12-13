@@ -44,32 +44,6 @@ export function register(config?: Config) {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       console.log("loaddddddd")
-      // clear&sync up localStorage when refresh page
-      const key = "records"
-      const url = 'https://jugbaht-api.herokuapp.com/records';
-      const recoredRaw: string = localStorage.getItem(key) || "[]";
-      const records: Record[] = JSON.parse(recoredRaw)
-
-      const markAsDeletes = records.filter((r: Record) => r.makeAsDelete).map((r: Record) => `${url}/${r._id}`)
-      const options = {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      }
-      Promise.all(markAsDeletes.map(url => fetch(url, options))).then(resps => {
-        return Promise.all(resps.filter(r => r.ok).map(r => r.json()))
-      })
-        .then((bodies) => {
-          const _ids = bodies.map((r: Record) => r._id)
-          const updatedRecords = JSON.stringify(records.filter(r => !_ids.includes(r._id)));
-          localStorage.setItem(key, updatedRecords);
-        }).catch((err) => {
-          console.log(err);
-        });
-
-
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
