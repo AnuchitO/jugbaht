@@ -93,7 +93,7 @@ const ExpensesHistory: React.FC<Props> = (props) => {
               {/* TODO: IMPORTANT slide delete item when typo */}
               {
                 records.map((record: Record, index) => (
-                  <ListItem key={uuid()} className={classes.listItem} divider>
+                  !record.makeAsDelete && <ListItem key={uuid()} className={classes.listItem} divider>
                     <Box display="flex" p={1} className={classes.item}>
                       <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
                       <Box p={1} flexGrow={5}>
