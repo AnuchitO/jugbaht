@@ -57,8 +57,7 @@ export function* deleteExpenseRecord(action: AddExpense) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json;charset=UTF-8'
-    },
-    body: JSON.stringify(record)
+    }
   }
 
   try {

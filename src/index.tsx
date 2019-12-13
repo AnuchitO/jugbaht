@@ -8,6 +8,7 @@ import App from './App';
 import configureStore from './store'
 import * as serviceWorker from './serviceWorker';
 
+console.log("store.....")
 const store = configureStore()
 
 const Root = () => (
