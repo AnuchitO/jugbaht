@@ -62,7 +62,7 @@ export function* deleteExpenseRecord(action: AddExpense) {
   }
 
   try {
-    const response = yield call(fetch, `${url}xxx/${record._id}`, options);
+    const response = yield call(fetch, `${url}/${record._id}`, options);
     if (response.ok) {
       const dataString = JSON.stringify(records.filter(r => r.id !== record.id));
       yield localStorage.setItem(key, dataString);
