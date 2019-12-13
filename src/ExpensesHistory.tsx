@@ -79,7 +79,7 @@ const ExpensesHistory: React.FC<Props> = (props) => {
     props.deleteExpense(record)
   }
 
-  return (records.length === 0) ?
+  return (records.filter(r => !r.makeAsDelete).length === 0) ?
     <Box p={1} className={classes.noRecord}>
       <Typography variant="button">NO RECORD</Typography>
     </Box>
@@ -103,7 +103,7 @@ const ExpensesHistory: React.FC<Props> = (props) => {
                   action: () => deleteRecord(record)
                 }}
               >
-                <ListItem className={classes.listItem} divider>
+                {!record.makeAsDelete && <ListItem className={classes.listItem} divider>
                   <Box display="flex" p={1} className={classes.item}>
                     <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
                     <Box p={1} flexGrow={5}>
@@ -122,7 +122,7 @@ const ExpensesHistory: React.FC<Props> = (props) => {
                         ฿{record.amount}
                       </Typography></Box>
                   </Box>
-                </ListItem>
+                </ListItem>}
               </SwipeableListItem>
             ))
           }
