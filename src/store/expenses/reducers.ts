@@ -26,6 +26,7 @@ const initialState: ExpenseState = {
   note: "Snack",
   notes: [
     "อื่นๆ",
+    "ทางด่วน",
     "Food",
     "Drink",
     "Snack",
