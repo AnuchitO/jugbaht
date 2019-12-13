@@ -6,16 +6,22 @@ import {
   List,
   ListItem,
   FormHelperText,
+  ListItemSecondaryAction,
+  IconButton,
 } from '@material-ui/core'
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
+import { Delete as DeleteIcon } from '@material-ui/icons'
+import { deleteExpense } from './store/expenses/actions'
+
 
 
 type Props = {
   records: Record[]
+  deleteExpense: typeof deleteExpense
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,8 +71,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-const ExpensesHistory: React.FC<Props> = ({ records }) => {
+const ExpensesHistory: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const records = props.records
+
+  const deleteRecord = (record: Record) => {
+    console.log(`delete ${record}`)
+    props.deleteExpense(record)
+  }
 
   return (records.length === 0) ?
     <Box p={1} className={classes.noRecord}>
@@ -100,6 +112,11 @@ const ExpensesHistory: React.FC<Props> = ({ records }) => {
                           ฿{record.amount}
                         </Typography></Box>
                     </Box>
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete" onClick={(e) => deleteRecord(record)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
                   </ListItem>
                 ))
               }

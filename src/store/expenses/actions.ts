@@ -1,6 +1,7 @@
 import {
   LOAD_EXPENSE_RECORDS,
   ADD_EXPENSE,
+  DELETE_EXPENSE,
   Member,
   Record,
   UPDATE_AMOUNT,
@@ -21,6 +22,11 @@ export const updateNote = (note: string) => ({
 
 export const addExpense = (record: Record) => ({
   type: ADD_EXPENSE,
+  payload: record
+})
+
+export const deleteExpense = (record: Record) => ({
+  type: DELETE_EXPENSE,
   payload: record
 })
 

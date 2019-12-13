@@ -37,7 +37,7 @@ import uuid from 'uuid/v4'
 import ExpensesHistory from './ExpensesHistory'
 import { connect } from 'react-redux'
 import { AppState } from './store'
-import { updateAmount, updateNote, addExpense, updateOwes, changePayer } from './store/expenses/actions'
+import { updateAmount, updateNote, addExpense, deleteExpense, updateOwes, changePayer } from './store/expenses/actions'
 import { Member, ExpenseState } from './store/expenses/types'
 
 type AmountProps = {
@@ -148,6 +148,7 @@ type Props = {
   expenses: ExpenseState
   updateAmount: typeof updateAmount
   addExpense: typeof addExpense
+  deleteExpense: typeof deleteExpense
   updateOwes: typeof updateOwes
   updateNote: typeof updateNote
   changePayer: typeof changePayer
@@ -340,7 +341,7 @@ const Expenses: React.FC<Props> = (props) => {
         m={1} // marginTop
       >
         {/* // bgcolor="background.paper" */}
-        <ExpensesHistory records={props.expenses.records} />
+        <ExpensesHistory deleteExpense={props.deleteExpense} records={props.expenses.records} />
       </Box>
       <Box
         className={classes.second}
@@ -404,6 +405,7 @@ export default withRouter(connect(
   (state: AppState) => ({ expenses: state.expenses }),
   {
     addExpense,
+    deleteExpense,
     updateOwes,
     updateNote,
     changePayer,

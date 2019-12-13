@@ -5,6 +5,7 @@ import {
   UPDATE_AMOUNT,
   UPDATE_NOTE,
   ADD_EXPENSE,
+  DELETE_EXPENSE,
   UPDATE_OWES,
   CHANGE_PAYER
 } from './types'
@@ -53,6 +54,11 @@ export function expenseReducer(
       return {
         ...state,
         records: [...state.records, action.payload]
+      }
+    case DELETE_EXPENSE:
+      return {
+        ...state,
+        records: state.records.filter(r => r.id !== action.payload.id)
       }
     case UPDATE_OWES:
       return {
