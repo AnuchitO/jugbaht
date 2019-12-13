@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react'
+import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
+import '@sandstreamdev/react-swipeable-list/dist/styles.css';
 import { Record } from './store/expenses/types'
 import uuid from 'uuid/v4'
 import {
   Box,
-  List,
   ListItem,
   FormHelperText,
-  ListItemSecondaryAction,
   IconButton,
 } from '@material-ui/core'
 
@@ -70,7 +70,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
 const ExpensesHistory: React.FC<Props> = (props) => {
   const classes = useStyles();
   const records = props.records
@@ -86,44 +85,51 @@ const ExpensesHistory: React.FC<Props> = (props) => {
     </Box>
     : (
       <Fragment>
-        <List className={classes.list} subheader={<li />}>
-          <li >
-            <ul className={classes.ul}>
-              <ListSubheader>History</ListSubheader>
-              {/* TODO: IMPORTANT slide delete item when typo */}
-              {
-                records.map((record: Record, index) => (
-                  !record.makeAsDelete && <ListItem key={uuid()} className={classes.listItem} divider>
-                    <Box display="flex" p={1} className={classes.item}>
-                      <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
-                      <Box p={1} flexGrow={5}>
-                        <Typography variant="button">
-                          {record.payer.name}
-                        </Typography>
-                        <FormHelperText className={classes.description}>
-                          paid for : {record.owes.map(o => o.name).join(",")}
-                        </FormHelperText>
-                        <Typography variant="caption">
-                          {record.note}
-                        </Typography>
-                      </Box>
-                      <Box p={1} flexGrow={1} className={classes.center}>
-                        <Typography className={classes.amount} variant="h6" gutterBottom>
-                          ฿{record.amount}
-                        </Typography></Box>
+        <SwipeableList>
+          {
+            records.map((record: Record, index) => (
+              <SwipeableListItem
+                key={uuid()}
+                swipeLeft={{
+                  content: <IconButton color="secondary" edge="end" aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>,
+                  action: () => deleteRecord(record)
+                }}
+                swipeRight={{
+                  content: <IconButton color="secondary" edge="end" aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>,
+                  action: () => deleteRecord(record)
+                }}
+              >
+                <ListItem className={classes.listItem} divider>
+                  <Box display="flex" p={1} className={classes.item}>
+                    <Box p={1} flexGrow={1} className={classes.center}><FastfoodOutlinedIcon /></Box>
+                    <Box p={1} flexGrow={5}>
+                      <Typography variant="button">
+                        {record.payer.name}
+                      </Typography>
+                      <FormHelperText className={classes.description}>
+                        paid for : {record.owes.map(o => o.name).join(",")}
+                      </FormHelperText>
+                      <Typography variant="caption">
+                        {record.note}
+                      </Typography>
                     </Box>
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="delete" onClick={(e) => deleteRecord(record)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))
-              }
-              <ListItem className={classes.listItem} id="id-last-history-item-dummy"></ListItem>
-            </ul>
-          </li>
-        </List>
+                    <Box p={1} flexGrow={1} className={classes.center}>
+                      <Typography className={classes.amount} variant="h6" gutterBottom>
+                        ฿{record.amount}
+                      </Typography></Box>
+                  </Box>
+                </ListItem>
+              </SwipeableListItem>
+            ))
+          }
+          <SwipeableListItem>
+            <ListItem className={classes.listItem} id="id-last-history-item-dummy"></ListItem>
+          </SwipeableListItem>
+        </SwipeableList>
       </Fragment>
     )
 }

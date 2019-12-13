@@ -1227,6 +1227,11 @@
   resolved "https://registry.yarnpkg.com/@redux-saga/types/-/types-1.1.0.tgz#0e81ce56b4883b4b2a3001ebe1ab298b84237204"
   integrity sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
 
+"@sandstreamdev/react-swipeable-list@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@sandstreamdev/react-swipeable-list/-/react-swipeable-list-0.3.1.tgz#77b0ced7b76d16367e40bcf455afc3ff0a1bbe57"
+  integrity sha512-AbKP6QY1Vac+cdLPmTm/j5OrAhe3dVxfqK2JKGwBgrQOKcLh/Tcm8OqbAwHtGIqMtmrUhMXdA9KPc866Nw/1pQ==
+
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-4.2.0.tgz#dadcb6218503532d6884b210e7f3c502caaa44b1"
