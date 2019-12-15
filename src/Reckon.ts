@@ -9,7 +9,7 @@ type Balance = {
 }
 
 
-export const reckon = (balances: any, ledgers: Ledgers): any => {
+export const reckon = (balances: any, ledgers: Ledgers): Ledgers => {
   let max = balances.reduce((p: any, c: any, index: number) => (c.balance > p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
   let min = balances.reduce((p: any, c: any, index: number) => (c.balance < p.balance) ? { ...c, index: index } : p, { index: 0, balance: 0 })
 
@@ -32,7 +32,7 @@ export const reckon = (balances: any, ledgers: Ledgers): any => {
     return b
   })
 
-  const _ledgers = [...ledgers, {
+  const _ledgers: Ledgers = [...ledgers, {
     debtor: min.member,
     amount: diff,
     creditor: max.member

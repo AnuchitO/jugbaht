@@ -2,7 +2,6 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { Record, AddExpense, DELETE_EXPENSE } from '../expenses/types'
 import { LOAD_EXPENSE_RECORDS, INIT_EXPENSE_RECORDS, ADD_EXPENSE } from '../expenses/types';
-import { async } from 'q';
 
 const key = "records"
 const urlApi = 'https://jugbaht-api.herokuapp.com/records';

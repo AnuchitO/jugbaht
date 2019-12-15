@@ -14,7 +14,8 @@ import {
 } from '@material-ui/core'
 import { reckon, doBalances } from './Reckon'
 
-type Ledgers = { creditor: Member, amount: number, debtor: Member }[]
+type Ledger = { creditor: Member, amount: number, debtor: Member }
+type Ledgers = Ledger[]
 type SummaryState = {
   ledgers: Ledgers
 }
@@ -31,13 +32,13 @@ class Summary extends React.Component<Props, SummaryState> {
     }
   }
 
-  initialize() {
+  initialize(): { ledgers: Ledgers } {
     const { records, members } = this.props.expenses
 
     const balances = doBalances(records, members)
 
     return {
-      ledgers: reckon(balances, [])
+      ledgers: reckon(balances, []).sort((a: Ledger, b: Ledger) => (a.debtor.name > b.debtor.name) ? 1 : ((b.debtor.name > a.debtor.name) ? -1 : 0))
     }
   }
 
